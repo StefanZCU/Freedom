@@ -1,4 +1,5 @@
-﻿using Freedom.Infrastructure.Data.Models;
+﻿using System.Reflection;
+using Freedom.Infrastructure.Data.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -20,5 +21,7 @@ public class FreedomDbContext : IdentityDbContext
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
+        
+        builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
     }
 }
