@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Freedom", "Freedom\Freedom.csproj", "{C48AE456-BF83-4BB2-AF8C-0FF8A5BC47ED}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Freedom.Web", "Freedom.Web\Freedom.Web.csproj", "{C48AE456-BF83-4BB2-AF8C-0FF8A5BC47ED}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Freedom.Core", "Freedom.Core\Freedom.Core.csproj", "{9EEAC53D-1AEB-4369-BE58-DF93BD9949EB}"
 EndProject

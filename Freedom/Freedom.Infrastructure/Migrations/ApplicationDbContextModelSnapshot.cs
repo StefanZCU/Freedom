@@ -22,7 +22,7 @@ namespace Freedom.Data.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Freedom.Infrastructure.Data.Models.Listing", b =>
+            modelBuilder.Entity("Freedom.Web.Infrastructure.Data.Models.Listing", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -119,7 +119,7 @@ namespace Freedom.Data.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Freedom.Infrastructure.Data.Models.Worker", b =>
+            modelBuilder.Entity("Freedom.Web.Infrastructure.Data.Models.Worker", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -172,7 +172,7 @@ namespace Freedom.Data.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Freedom.Infrastructure.Data.Models.WorkerTypeCategory", b =>
+            modelBuilder.Entity("Freedom.Web.Infrastructure.Data.Models.WorkerTypeCategory", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -453,7 +453,7 @@ namespace Freedom.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("Freedom.Infrastructure.Data.Models.Listing", b =>
+            modelBuilder.Entity("Freedom.Web.Infrastructure.Data.Models.Listing", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "Uploader")
                         .WithMany()
@@ -461,11 +461,11 @@ namespace Freedom.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Freedom.Infrastructure.Data.Models.Worker", "Worker")
+                    b.HasOne("Freedom.Web.Infrastructure.Data.Models.Worker", "Worker")
                         .WithMany()
                         .HasForeignKey("WorkerId");
 
-                    b.HasOne("Freedom.Infrastructure.Data.Models.WorkerTypeCategory", "WorkerTypeCategory")
+                    b.HasOne("Freedom.Web.Infrastructure.Data.Models.WorkerTypeCategory", "WorkerTypeCategory")
                         .WithMany()
                         .HasForeignKey("WorkerTypeCategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -478,7 +478,7 @@ namespace Freedom.Data.Migrations
                     b.Navigation("WorkerTypeCategory");
                 });
 
-            modelBuilder.Entity("Freedom.Infrastructure.Data.Models.Worker", b =>
+            modelBuilder.Entity("Freedom.Web.Infrastructure.Data.Models.Worker", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
                         .WithMany()
@@ -486,7 +486,7 @@ namespace Freedom.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Freedom.Infrastructure.Data.Models.WorkerTypeCategory", "WorkerTypeCategory")
+                    b.HasOne("Freedom.Web.Infrastructure.Data.Models.WorkerTypeCategory", "WorkerTypeCategory")
                         .WithMany()
                         .HasForeignKey("WorkerTypeCategoryId")
                         .OnDelete(DeleteBehavior.Cascade)

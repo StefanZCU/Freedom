@@ -1,4 +1,4 @@
-namespace Freedom.Models;
+namespace Freedom.Web.Models;
 
 public class ErrorViewModel
 {

@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Freedom.Controllers;
+namespace Freedom.Web.Controllers;
 
 [Authorize]
 public class BaseController : Controller

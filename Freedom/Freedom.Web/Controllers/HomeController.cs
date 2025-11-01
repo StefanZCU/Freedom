@@ -1,8 +1,8 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using Freedom.Models;
+using Freedom.Web.Models;
 
-namespace Freedom.Controllers;
+namespace Freedom.Web.Controllers;
 
 public class HomeController : BaseController
 {

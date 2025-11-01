@@ -1,8 +1,3 @@
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Freedom.Data;
-using Freedom.Infrastructure.Data;
-
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddApplicationServices();
