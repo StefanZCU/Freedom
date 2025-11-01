@@ -4,6 +4,7 @@ builder.Services.AddApplicationServices();
 builder.Services.AddApplicationDbContext(builder.Configuration);
 builder.Services.AddApplicationIdentity();
 
+
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
