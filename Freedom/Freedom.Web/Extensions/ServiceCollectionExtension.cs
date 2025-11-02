@@ -1,3 +1,5 @@
+using Freedom.Core.Contracts;
+using Freedom.Core.Services;
 using Freedom.Infrastructure.Data;
 using Freedom.Infrastructure.Data.Common;
 using Microsoft.AspNetCore.Identity;
@@ -9,6 +11,8 @@ public static class ServiceCollectionExtension
 {
     public static IServiceCollection AddApplicationServices(this IServiceCollection services)
     {
+        services.AddScoped<IListingService, ListingService>();
+        
         return services;
     }
 

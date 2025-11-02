@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Freedom.Web.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Freedom.Web.Controllers;
 
@@ -13,6 +14,7 @@ public class HomeController : BaseController
         _logger = logger;
     }
 
+    [AllowAnonymous]
     public IActionResult Index()
     {
         return View();
