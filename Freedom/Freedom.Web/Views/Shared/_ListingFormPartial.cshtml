@@ -1,0 +1,46 @@
+@model ListingFormModel
+
+<div class="row g-3">
+    <div class="col-12">
+        <div asp-validation-summary="ModelOnly" class="alert alert-danger mb-0"></div>
+    </div>
+
+    <div class="col-12">
+        <label asp-for="Title" class="form-label"></label>
+        <input asp-for="Title" class="form-control" />
+        <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
+
+    <div class="col-12">
+        <label asp-for="Description" class="form-label"></label>
+        <textarea asp-for="Description" class="form-control" rows="5"></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+
+    <div class="col-12">
+        <label asp-for="LocationAddress" class="form-label"></label>
+        <input asp-for="LocationAddress" class="form-control" />
+        <span asp-validation-for="LocationAddress" class="text-danger"></span>
+    </div>
+
+    <div class="col-md-6">
+        <label asp-for="Budget" class="form-label"></label>
+        <div class="input-group">
+            <span class="input-group-text">лв.</span>
+            <input asp-for="Budget" class="form-control" inputmode="decimal" />
+        </div>
+        <span asp-validation-for="Budget" class="text-danger"></span>
+    </div>
+
+    <div class="col-md-6">
+        <label asp-for="WorkerTypeCategoryId" class="form-label"></label>
+        <select asp-for="WorkerTypeCategoryId" class="form-select">
+            <option value="">Select category</option>
+            @foreach (var c in Model.WorkerTypeCategories)
+            {
+                <option value="@c.Id">@c.Name</option>
+            }
+        </select>
+        <span asp-validation-for="WorkerTypeCategoryId" class="text-danger"></span>
+    </div>
+</div>

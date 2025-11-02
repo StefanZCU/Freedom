@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using Freedom.Core.Contracts;
 using Freedom.Core.Models.Listing;
 using Microsoft.AspNetCore.Authorization;
@@ -36,13 +37,32 @@ public class ListingController : BaseController
     [HttpGet]
     public async Task<IActionResult> Create()
     {
-        return View();
+        return View(new ListingFormModel()
+        {
+            Title = string.Empty,
+            Description = string.Empty,
+            LocationAddress = string.Empty,
+            WorkerTypeCategories = await _listingService.AllWorkerTypeCategoriesAsync()
+        });
     }
 
     [HttpPost]
     public async Task<IActionResult> Create(ListingFormModel model)
     {
-        return View();
+        if (!await _listingService.WorkerTypeCategoryExistsAsync(model.WorkerTypeCategoryId))
+        {
+            ModelState.AddModelError(nameof(model.WorkerTypeCategoryId), "Worker type category does not exist.");
+        }
+        
+        if (!ModelState.IsValid)
+        {
+            model.WorkerTypeCategories = await _listingService.AllWorkerTypeCategoriesAsync();
+            return View(model);
+        }
+
+        var newListingId = await _listingService.CreateListingAsync(model, User.Id());
+        
+        return RedirectToAction("Details", new { listingId = newListingId });
     }
 
     [HttpGet]

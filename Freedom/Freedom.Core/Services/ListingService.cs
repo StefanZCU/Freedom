@@ -1,5 +1,6 @@
 using Freedom.Core.Contracts;
 using Freedom.Core.Models.Listing;
+using Freedom.Core.Models.Worker;
 using Freedom.Infrastructure.Data.Common;
 using Freedom.Infrastructure.Data.Models;
 using Microsoft.EntityFrameworkCore;
@@ -52,9 +53,37 @@ public class ListingService : IListingService
             .FirstAsync();
     }
 
-    public async Task<int> CreateListingAsync(ListingFormModel model)
+    public async Task<IEnumerable<WorkerTypeCategoryServiceModel>> AllWorkerTypeCategoriesAsync()
     {
-        throw new NotImplementedException();
+        return await _repository.AllReadOnly<WorkerTypeCategory>()
+            .Select(wtc => new WorkerTypeCategoryServiceModel()
+            {
+                Id = wtc.Id,
+                Name = wtc.Name
+            })
+            .ToListAsync();
+    }
+
+    public Task<bool> WorkerTypeCategoryExistsAsync(int workerTypeCategoryId) 
+        => _repository.AllReadOnly<WorkerTypeCategory>().AnyAsync(wtc => wtc.Id == workerTypeCategoryId);
+
+
+    public async Task<int> CreateListingAsync(ListingFormModel model, string userId)
+    {
+        var listing = new Listing()
+        {
+            Title = model.Title,
+            Description = model.Description,
+            LocationAddress = model.LocationAddress,
+            Budget = model.Budget,
+            WorkerTypeCategoryId = model.WorkerTypeCategoryId,
+            UploaderId = userId
+        };
+        
+        await _repository.AddAsync(listing);
+        await _repository.SaveChangesAsync();
+        
+        return listing.Id;
     }
 
     public async Task<bool> IsOwnerAsync(int listingId, string userId)
