@@ -1,5 +1,6 @@
 using Freedom.Core.Contracts;
 using Freedom.Core.Models.Listing;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Freedom.Web.Controllers;
@@ -14,6 +15,7 @@ public class ListingController : BaseController
         _listingService = listingService;
     }
 
+    [AllowAnonymous]
     public async Task<IActionResult> Index()
     {
         var model = await _listingService.GetAllAsync();
@@ -22,7 +24,13 @@ public class ListingController : BaseController
 
     public async Task<IActionResult> Details(int listingId)
     {
-        return View();
+        if (!await _listingService.ListingExistsAsync(listingId))
+        {
+            return NotFound();
+        }
+        
+        var model = await _listingService.ListingDetailsByIdAsync(listingId);
+        return View(model);
     }
 
     [HttpGet]
@@ -32,7 +40,7 @@ public class ListingController : BaseController
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create(ListingFormViewModel model)
+    public async Task<IActionResult> Create(ListingFormModel model)
     {
         return View();
     }
@@ -44,7 +52,7 @@ public class ListingController : BaseController
     }
 
     [HttpPost]
-    public async Task<IActionResult> Edit(int listingId, ListingFormViewModel model)
+    public async Task<IActionResult> Edit(int listingId, ListingFormModel model)
     {
         return View();
     }

@@ -16,11 +16,11 @@ public class ListingService : IListingService
         _repository = repository;
     }
 
-    public async Task<IEnumerable<ListingViewModel>> GetAllAsync()
+    public async Task<IEnumerable<ListingServiceModel>> GetAllAsync()
     {
         return await _repository
             .AllReadOnly<Listing>()
-            .Select(l => new ListingViewModel()
+            .Select(l => new ListingServiceModel()
             {
                 Id = l.Id,
                 Title = l.Title,
@@ -32,12 +32,27 @@ public class ListingService : IListingService
             .ToListAsync();
     }
 
-    public async Task<ListingViewModel> GetListingByIdAsync(int id)
+    public async Task<ListingDetailsServiceModel> ListingDetailsByIdAsync(int listingId)
     {
-        throw new NotImplementedException();
+        return await _repository
+            .AllReadOnly<Listing>()
+            .Where(l => l.Id == listingId)
+            .Select(l => new ListingDetailsServiceModel()
+            {
+                Id = l.Id,
+                Title = l.Title,
+                Description = l.Description,
+                LocationAddress = l.LocationAddress,
+                Budget = l.Budget,
+                WorkerTypeCategory = l.WorkerTypeCategory.Name,
+                ListingStatus = l.ListingStatus,
+                Uploader = l.Uploader.UserName,
+                Worker = l.Worker.User.UserName ?? "No worker assigned"
+            })
+            .FirstAsync();
     }
 
-    public async Task<int> CreateListingAsync(ListingFormViewModel model)
+    public async Task<int> CreateListingAsync(ListingFormModel model)
     {
         throw new NotImplementedException();
     }
@@ -47,7 +62,7 @@ public class ListingService : IListingService
         throw new NotImplementedException();
     }
 
-    public async Task EditListingAsync(int listingId, ListingFormViewModel model)
+    public async Task EditListingAsync(int listingId, ListingFormModel model)
     {
         throw new NotImplementedException();
     }
@@ -56,4 +71,7 @@ public class ListingService : IListingService
     {
         throw new NotImplementedException();
     }
+
+    public Task<bool> ListingExistsAsync(int listingId)
+        => _repository.AllReadOnly<Listing>().AnyAsync(l => l.Id == listingId);
 }

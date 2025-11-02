@@ -1,18 +1,21 @@
 using Freedom.Core.Models.Listing;
+using Freedom.Infrastructure.Data.Models;
 
 namespace Freedom.Core.Contracts;
 
 public interface IListingService
 {
-    Task<IEnumerable<ListingViewModel>> GetAllAsync();
+    Task<IEnumerable<ListingServiceModel>> GetAllAsync();
 
-    Task<ListingViewModel> GetListingByIdAsync(int id);
+    Task<ListingDetailsServiceModel> ListingDetailsByIdAsync(int listingId);
 
-    Task<int> CreateListingAsync(ListingFormViewModel model);
+    Task<int> CreateListingAsync(ListingFormModel model);
 
     Task<bool> IsOwnerAsync(int listingId, string userId);
     
-    Task EditListingAsync(int listingId, ListingFormViewModel model);
+    Task EditListingAsync(int listingId, ListingFormModel model);
     
     Task DeleteListingAsync(int listingId);
+    
+    Task<bool> ListingExistsAsync(int listingId);
 }

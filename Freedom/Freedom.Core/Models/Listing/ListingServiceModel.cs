@@ -4,7 +4,7 @@ using Freedom.Infrastructure.Enums;
 
 namespace Freedom.Core.Models.Listing;
 
-public class ListingViewModel
+public class ListingServiceModel
 {
     public int Id { get; set; }
 
