@@ -51,7 +51,7 @@ public class ListingController : BaseController
     {
         if (!await _listingService.WorkerTypeCategoryExistsAsync(model.WorkerTypeCategoryId))
         {
-            ModelState.AddModelError(nameof(model.WorkerTypeCategoryId), "Worker type category does not exist.");
+            ModelState.AddModelError(nameof(model.WorkerTypeCategoryId),  "Select a valid worker type category.");
         }
         
         if (!ModelState.IsValid)
