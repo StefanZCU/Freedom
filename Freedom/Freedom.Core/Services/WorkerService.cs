@@ -15,11 +15,11 @@ public class WorkerService : IWorkerService
         _repository = repository;
     }
 
-    public async Task<bool> WorkerAlreadyExistsAsync(string workerId)
+    public async Task<bool> WorkerAlreadyExistsAsync(string userId)
     {
         return await _repository
             .AllReadOnly<Worker>()
-            .AnyAsync(w => w.UserId == workerId);
+            .AnyAsync(w => w.UserId == userId);
     }
 
     public async Task CreateWorkerAsync(string userId, BecomeWorkerFormModel model)
