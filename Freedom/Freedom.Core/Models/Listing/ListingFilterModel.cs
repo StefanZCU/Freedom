@@ -1,3 +1,4 @@
+using Freedom.Core.Enums;
 using Freedom.Infrastructure.Enums;
 
 namespace Freedom.Core.Models.Listing;
@@ -13,6 +14,8 @@ public class ListingFilterModel
     public ListingStatus? Status { get; set; }
     
     public string? SearchTerm { get; set; }
+    
+    public ListingSortOptions? SortBy { get; set; }
     
     public int Page { get; set; } = 1;
     

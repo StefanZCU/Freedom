@@ -1,3 +1,4 @@
+@using Freedom.Core.Enums
 @model ListingIndexViewModel
 @{
     ViewData["Title"] = "Listings";
@@ -35,11 +36,19 @@
                 <div class="col-md-3">
                     <label class="form-label" for="Status">Status</label>
                     <select class="form-select" id="Status" name="Status">
-                        <option value="">Active (default)</option>
-                        <option value="Active" selected="@(Model.Filter.Status == ListingStatus.Active)">Active</option>
+                        <option value="">Active</option>
                         <option value="Assigned" selected="@(Model.Filter.Status == ListingStatus.Assigned)">Assigned</option>
                         <option value="Completed" selected="@(Model.Filter.Status == ListingStatus.Completed)">Completed</option>
                         <option value="Archived" selected="@(Model.Filter.Status == ListingStatus.Archived)">Archived</option>
+                    </select>
+                </div>
+                
+                <div class="col-md-3">
+                    <label class="form-label" for="SortBy">Sort by</label>
+                    <select class="form-select" id="SortBy" name="SortBy">
+                        <option value="">Newest</option>
+                        <option value="BudgetAsc" selected="@(Model.Filter.SortBy == ListingSortOptions.BudgetAsc)">Budget ↑</option>
+                        <option value="BudgetDesc" selected="@(Model.Filter.SortBy == ListingSortOptions.BudgetDesc)">Budget ↓</option>
                     </select>
                 </div>
                 

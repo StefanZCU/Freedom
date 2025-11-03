@@ -1,4 +1,5 @@
 using Freedom.Core.Contracts;
+using Freedom.Core.Enums;
 using Freedom.Core.Models.Listing;
 using Freedom.Core.Models.Worker;
 using Freedom.Infrastructure.Data.Common;
@@ -31,6 +32,13 @@ public class ListingService : IListingService
             query = query.Where(l => l.Title.Contains(searchTerm) || l.Description.Contains(searchTerm));
         }
 
+        query = f.SortBy switch
+        { 
+            ListingSortOptions.BudgetAsc => query.OrderBy(l => l.Budget),
+            ListingSortOptions.BudgetDesc => query.OrderByDescending(l => l.Budget),
+            _ => query.OrderByDescending(l => l.Id)
+        };
+
         if (f.CategoryId is int catId)
             query = query.Where(l => l.WorkerTypeCategoryId == catId);
 
@@ -39,8 +47,6 @@ public class ListingService : IListingService
 
         if (f.MaxBudget is decimal max)
             query = query.Where(l => l.Budget <= max);
-
-        query = query.OrderByDescending(l => l.Id);
 
         var total = await query.CountAsync();
 
