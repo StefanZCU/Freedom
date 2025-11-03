@@ -24,6 +24,12 @@ public class ListingService : IListingService
 
         var status = f.Status ?? ListingStatus.Active;
         query = query.Where(l => l.ListingStatus == status);
+        
+        var searchTerm = f.SearchTerm?.Trim();
+        if (!string.IsNullOrWhiteSpace(searchTerm))
+        {
+            query = query.Where(l => l.Title.Contains(searchTerm) || l.Description.Contains(searchTerm));
+        }
 
         if (f.CategoryId is int catId)
             query = query.Where(l => l.WorkerTypeCategoryId == catId);

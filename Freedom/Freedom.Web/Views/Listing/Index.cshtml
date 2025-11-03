@@ -37,9 +37,20 @@
                     <select class="form-select" id="Status" name="Status">
                         <option value="">Active (default)</option>
                         <option value="Active" selected="@(Model.Filter.Status == ListingStatus.Active)">Active</option>
-                        <option value="Archived" selected="@(Model.Filter.Status == ListingStatus.Archived)">Archived</option>
+                        <option value="Assigned" selected="@(Model.Filter.Status == ListingStatus.Assigned)">Assigned</option>
                         <option value="Completed" selected="@(Model.Filter.Status == ListingStatus.Completed)">Completed</option>
+                        <option value="Archived" selected="@(Model.Filter.Status == ListingStatus.Archived)">Archived</option>
                     </select>
+                </div>
+                
+                <div class="col-md-4">
+                    <label class="form-label" for="SearchTerm">Search</label>
+                    <input class="form-control"
+                           type="text"
+                           id="SearchTerm"
+                           name="SearchTerm"
+                           value="@(Model.Filter.SearchTerm ?? "")"
+                           placeholder="Title or description..." />
                 </div>
 
                 <div class="col-12 d-flex gap-2">
