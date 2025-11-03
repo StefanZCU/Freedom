@@ -41,14 +41,4 @@ public class Repository : IRepository
     {
         return await DbSet<T>().FindAsync(id);
     }
-
-    public async Task DeleteAsync<T>(object id) where T : class
-    {
-        var entity = await GetByIdAsync<T>(id);
-
-        if (entity != null)
-        {
-            DbSet<T>().Remove(entity);
-        }
-    }
 }

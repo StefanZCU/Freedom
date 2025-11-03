@@ -22,6 +22,7 @@ public class ListingService : IListingService
     {
         return await _repository
             .AllReadOnly<Listing>()
+            .Where(l => l.ListingStatus == ListingStatus.Active)
             .Select(l => new ListingServiceModel()
             {
                 Id = l.Id,
@@ -113,11 +114,14 @@ public class ListingService : IListingService
             .AnyAsync(l => l.Id == listingId && l.UploaderId == userId);
     }
 
-    public async Task<bool> EditListingAsync(int listingId, ListingFormModel model)
+    public async Task<bool> EditListingAsync(int listingId, ListingFormModel model, string userId)
     {
         var listing = await _repository
             .All<Listing>()
-            .FirstOrDefaultAsync(l => l.Id == listingId && l.ListingStatus == ListingStatus.Active);
+            .FirstOrDefaultAsync(l => l.Id == listingId 
+                                      && l.ListingStatus == ListingStatus.Active
+                                      && l.WorkerId == null
+                                      && l.UploaderId == userId);
 
         if (listing == null)
         {
@@ -134,10 +138,21 @@ public class ListingService : IListingService
         return true;
     }
 
-    public async Task DeleteListingAsync(int listingId)
+    public async Task<bool> DeleteListingAsync(int listingId, string userId)
     {
-        await _repository.DeleteAsync<Listing>(listingId);
+        var listing = await _repository
+            .All<Listing>()
+            .FirstOrDefaultAsync(l => l.Id == listingId 
+                                 && l.ListingStatus == ListingStatus.Active
+                                 && l.WorkerId == null
+                                 && l.UploaderId == userId);
+
+        if (listing == null) return false;
+        
+        listing.ListingStatus = ListingStatus.Archived;
         await _repository.SaveChangesAsync();
+        return true;
+
     }
 
     public Task<bool> ListingExistsAsync(int listingId)

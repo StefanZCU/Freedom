@@ -23,6 +23,7 @@ public class ListingController : BaseController
         return View(model);
     }
 
+    [HttpGet]
     public async Task<IActionResult> Details(int listingId)
     {
         if (!await _listingService.ListingExistsAsync(listingId))
@@ -47,6 +48,7 @@ public class ListingController : BaseController
     }
 
     [HttpPost]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(ListingFormModel model)
     {
         if (!await _listingService.WorkerTypeCategoryExistsAsync(model.WorkerTypeCategoryId))
@@ -85,18 +87,9 @@ public class ListingController : BaseController
     }
 
     [HttpPost]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> Edit(int listingId, ListingFormModel model)
     {
-        if (!await _listingService.ListingExistsAsync(listingId))
-        {
-            return NotFound();
-        }
-
-        if (!await _listingService.IsOwnerAsync(listingId, User.Id()))
-        {
-            return Forbid();
-        }
-
         if (!await _listingService.WorkerTypeCategoryExistsAsync(model.WorkerTypeCategoryId))
         {
             ModelState.AddModelError(nameof(model.WorkerTypeCategoryId),  "Select a valid worker type category.");
@@ -109,7 +102,7 @@ public class ListingController : BaseController
             return View(model);
         }
         
-        var ok = await _listingService.EditListingAsync(listingId, model);
+        var ok = await _listingService.EditListingAsync(listingId, model, User.Id());
 
         if (!ok)
         {
@@ -120,19 +113,15 @@ public class ListingController : BaseController
     }
     
     [HttpPost]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> Delete(int listingId)
     {
-        if (!await _listingService.ListingExistsAsync(listingId))
-        {
-            return NotFound();
-        }
+        var ok = await _listingService.DeleteListingAsync(listingId, User.Id());
 
-        if (!await _listingService.IsOwnerAsync(listingId, User.Id()))
+        if (!ok)
         {
-            return Forbid();
+            return BadRequest();
         }
-        
-        await _listingService.DeleteListingAsync(listingId);
         
         return RedirectToAction(nameof(Index));
     }
