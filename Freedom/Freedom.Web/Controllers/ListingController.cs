@@ -68,13 +68,50 @@ public class ListingController : BaseController
     [HttpGet]
     public async Task<IActionResult> Edit(int listingId)
     {
-        return View();
+        if (!await _listingService.ListingExistsAsync(listingId))
+        {
+            return NotFound();
+        }
+
+        if (!await _listingService.IsOwnerAsync(listingId, User.Id()))
+        {
+            return Forbid();
+        }
+        
+        var model = await _listingService.GetListingFormModelByIdAsync(listingId);
+        
+        ViewBag.ListingId = listingId;
+        return View(model);
     }
 
     [HttpPost]
     public async Task<IActionResult> Edit(int listingId, ListingFormModel model)
     {
-        return View();
+        if (!await _listingService.ListingExistsAsync(listingId))
+        {
+            return NotFound();
+        }
+
+        if (!await _listingService.IsOwnerAsync(listingId, User.Id()))
+        {
+            return Forbid();
+        }
+
+        if (!await _listingService.WorkerTypeCategoryExistsAsync(model.WorkerTypeCategoryId))
+        {
+            ModelState.AddModelError(nameof(model.WorkerTypeCategoryId),  "Select a valid worker type category.");
+        }
+
+        if (!ModelState.IsValid)
+        {
+            model.WorkerTypeCategories = await _listingService.AllWorkerTypeCategoriesAsync();
+            ViewBag.ListingId = listingId;
+            return View(model);
+        }
+        
+        await _listingService.EditListingAsync(listingId, model);
+        
+        return RedirectToAction(nameof(Details), new { listingId });
     }
     
     [HttpPost]

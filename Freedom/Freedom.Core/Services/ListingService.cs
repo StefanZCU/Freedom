@@ -64,8 +64,8 @@ public class ListingService : IListingService
             .ToListAsync();
     }
 
-    public Task<bool> WorkerTypeCategoryExistsAsync(int workerTypeCategoryId) 
-        => _repository.AllReadOnly<WorkerTypeCategory>().AnyAsync(wtc => wtc.Id == workerTypeCategoryId);
+    public async Task<bool> WorkerTypeCategoryExistsAsync(int workerTypeCategoryId) 
+        => await _repository.AllReadOnly<WorkerTypeCategory>().AnyAsync(wtc => wtc.Id == workerTypeCategoryId);
 
 
     public async Task<int> CreateListingAsync(ListingFormModel model, string userId)
@@ -86,14 +86,43 @@ public class ListingService : IListingService
         return listing.Id;
     }
 
+    public async Task<ListingFormModel> GetListingFormModelByIdAsync(int listingId)
+    {
+        var listing = await _repository
+            .AllReadOnly<Listing>()
+            .Where(l => l.Id == listingId)
+            .Select(l => new ListingFormModel()
+            {
+                Title = l.Title,
+                Description = l.Description,
+                LocationAddress = l.LocationAddress,
+                Budget = l.Budget,
+                WorkerTypeCategoryId = l.WorkerTypeCategoryId
+            })
+            .FirstAsync();
+        
+        listing.WorkerTypeCategories = await AllWorkerTypeCategoriesAsync();
+        
+        return listing;
+    }
+
     public async Task<bool> IsOwnerAsync(int listingId, string userId)
     {
-        throw new NotImplementedException();
+        return await _repository.AllReadOnly<Listing>()
+            .AnyAsync(l => l.Id == listingId && l.UploaderId == userId);
     }
 
     public async Task EditListingAsync(int listingId, ListingFormModel model)
     {
-        throw new NotImplementedException();
+        var listing = await _repository.GetByIdAsync<Listing>(listingId);
+        
+        listing.Title = model.Title;
+        listing.Description = model.Description;
+        listing.LocationAddress = model.LocationAddress;
+        listing.Budget = model.Budget;
+        listing.WorkerTypeCategoryId = model.WorkerTypeCategoryId;
+        
+        await _repository.SaveChangesAsync();
     }
 
     public async Task DeleteListingAsync(int listingId)

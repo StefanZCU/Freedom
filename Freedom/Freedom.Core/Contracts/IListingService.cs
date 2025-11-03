@@ -15,6 +15,8 @@ public interface IListingService
     Task<bool> WorkerTypeCategoryExistsAsync(int workerTypeCategoryId);
 
     Task<int> CreateListingAsync(ListingFormModel model, string userId);
+    
+    Task<ListingFormModel> GetListingFormModelByIdAsync(int listingId);
 
     Task<bool> IsOwnerAsync(int listingId, string userId);
     
