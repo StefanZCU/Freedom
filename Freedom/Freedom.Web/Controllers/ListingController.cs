@@ -1,6 +1,7 @@
 using System.Security.Claims;
 using Freedom.Core.Contracts;
 using Freedom.Core.Models.Listing;
+using Freedom.Infrastructure.Data.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,10 +18,20 @@ public class ListingController : BaseController
     }
 
     [AllowAnonymous]
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index([FromQuery] ListingFilterModel filter)
     {
-        var model = await _listingService.GetAllAsync();
-        return View(model);
+        var categories = await _listingService.AllWorkerTypeCategoriesAsync();
+        var (items, total) = await _listingService.AllAsync(filter);
+
+        var vm = new ListingIndexViewModel
+        {
+            Filter = filter,
+            Categories = categories.Select(c => new WorkerTypeCategory() { Id = c.Id, Name = c.Name }).ToList(),
+            Items = items,
+            TotalCount = total
+        };
+
+        return View(vm);
     }
 
     [HttpGet]

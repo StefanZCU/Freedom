@@ -1,60 +1,70 @@
-@model IEnumerable<ListingServiceModel>
-
+@model ListingIndexViewModel
 @{
     ViewData["Title"] = "Listings";
 }
 
 <div class="container mt-4">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1 class="mb-0">Listings</h1>
-        <a class="btn btn-success" asp-action="Create">
-            <i class="bi bi-plus-circle me-1"></i> Create New
-        </a>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1 class="mb-0">@ViewData["Title"]</h1>
+        <a asp-action="Create" class="btn btn-primary"><i class="bi bi-plus-lg me-1"></i>Create</a>
     </div>
 
-    @if (!Model.Any())
-    {
-        <div class="alert alert-info text-center">
-            <i class="bi bi-info-circle me-2"></i>No listings yet.  
+    <div class="card mb-3">
+        <div class="card-body">
+            <form method="get" class="row g-3">
+                <div class="col-md-3">
+                    <label class="form-label" for="CategoryId">Worker type</label>
+                    <select class="form-select" id="CategoryId" name="CategoryId"
+                            asp-items="@(new SelectList(Model.Categories, "Id", "Name", Model.Filter.CategoryId))">
+                        <option value="">All</option>
+                    </select>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label" for="MinBudget">Min budget</label>
+                    <input class="form-control" type="number" step="0.01" id="MinBudget" name="MinBudget"
+                           value="@(Model.Filter.MinBudget?.ToString() ?? "")" />
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label" for="MaxBudget">Max budget</label>
+                    <input class="form-control" type="number" step="0.01" id="MaxBudget" name="MaxBudget"
+                           value="@(Model.Filter.MaxBudget?.ToString() ?? "")" />
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label" for="Status">Status</label>
+                    <select class="form-select" id="Status" name="Status">
+                        <option value="">Active (default)</option>
+                        <option value="Active" selected="@(Model.Filter.Status == ListingStatus.Active)">Active</option>
+                        <option value="Archived" selected="@(Model.Filter.Status == ListingStatus.Archived)">Archived</option>
+                        <option value="Completed" selected="@(Model.Filter.Status == ListingStatus.Completed)">Completed</option>
+                    </select>
+                </div>
+
+                <div class="col-12 d-flex gap-2">
+                    <button type="submit" class="btn btn-outline-primary">
+                        <i class="bi bi-funnel me-1"></i> Filter
+                    </button>
+                    <a asp-action="Index" class="btn btn-outline-secondary">Reset</a>
+                </div>
+            </form>
         </div>
-    }
-    else
-    {
-        <div class="table-responsive">
-            <table class="table table-hover align-middle shadow-sm">
-                <thead class="table-light">
-                    <tr>
-                        <th>Title</th>
-                        <th>Location</th>
-                        <th>Budget</th>
-                        <th>Category</th>
-                        <th class="text-end">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Model)
-                    {
-                        <tr>
-                            <td>
-                                <a asp-action="Details" asp-route-listingId="@item.Id" class="fw-semibold text-decoration-none">
-                                    @item.Title
-                                </a>
-                            </td>
-                            <td>@item.LocationAddress</td>
-                            <td>@item.Budget.ToString("C")</td>
-                            <td>@item.WorkerTypeCategory</td>
-                            <td class="text-end">
-                                <a asp-action="Details" asp-route-listingId="@item.Id" class="btn btn-sm btn-outline-primary me-2">
-                                    <i class="bi bi-eye"></i> View
-                                </a>
-                                <a asp-action="Edit" asp-route-listingId="@item.Id" class="btn btn-sm btn-outline-secondary">
-                                    <i class="bi bi-pencil"></i> Edit
-                                </a>
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
-    }
+    </div>
+
+    <div class="row g-3">
+        @foreach (var item in Model.Items)
+        {
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">@item.Title</h5>
+                        <p class="card-text mb-1"><strong>Budget:</strong> @item.Budget.ToString("C")</p>
+                        <p class="card-text"><strong>Address:</strong> @item.LocationAddress</p>
+                        <a asp-action="Details" asp-route-listingId="@item.Id" class="btn btn-sm btn-primary">Details</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
 </div>

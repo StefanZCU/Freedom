@@ -18,21 +18,40 @@ public class ListingService : IListingService
         _repository = repository;
     }
 
-    public async Task<IEnumerable<ListingServiceModel>> GetAllAsync()
+    public async Task<(IEnumerable<ListingListItemViewModel> Items, int TotalCount)> AllAsync(ListingFilterModel f)
     {
-        return await _repository
-            .AllReadOnly<Listing>()
-            .Where(l => l.ListingStatus == ListingStatus.Active)
-            .Select(l => new ListingServiceModel()
+        var query = _repository.AllReadOnly<Listing>();
+
+        var status = f.Status ?? ListingStatus.Active;
+        query = query.Where(l => l.ListingStatus == status);
+
+        if (f.CategoryId is int catId)
+            query = query.Where(l => l.WorkerTypeCategoryId == catId);
+
+        if (f.MinBudget is decimal min)
+            query = query.Where(l => l.Budget >= min);
+
+        if (f.MaxBudget is decimal max)
+            query = query.Where(l => l.Budget <= max);
+
+        query = query.OrderByDescending(l => l.Id);
+
+        var total = await query.CountAsync();
+
+        var items = await query
+            .Skip((f.Page - 1) * f.PageSize)
+            .Take(f.PageSize)
+            .Select(l => new ListingListItemViewModel()
             {
                 Id = l.Id,
                 Title = l.Title,
-                Description = l.Description,
-                LocationAddress = l.LocationAddress,
                 Budget = l.Budget,
-                WorkerTypeCategory = l.WorkerTypeCategory.Name
+                LocationAddress = l.LocationAddress,
+                WorkerTypeCategoryId = l.WorkerTypeCategoryId
             })
             .ToListAsync();
+
+        return (items, total);
     }
 
     public async Task<ListingDetailsServiceModel> ListingDetailsByIdAsync(int listingId)

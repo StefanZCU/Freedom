@@ -6,7 +6,7 @@ namespace Freedom.Core.Contracts;
 
 public interface IListingService
 {
-    Task<IEnumerable<ListingServiceModel>> GetAllAsync();
+    Task<(IEnumerable<ListingListItemViewModel> Items, int TotalCount)> AllAsync(ListingFilterModel filter);
 
     Task<ListingDetailsServiceModel> ListingDetailsByIdAsync(int listingId);
     
