@@ -109,7 +109,12 @@ public class ListingController : BaseController
             return View(model);
         }
         
-        await _listingService.EditListingAsync(listingId, model);
+        var ok = await _listingService.EditListingAsync(listingId, model);
+
+        if (!ok)
+        {
+            return NotFound();
+        }
         
         return RedirectToAction(nameof(Details), new { listingId });
     }
@@ -117,6 +122,18 @@ public class ListingController : BaseController
     [HttpPost]
     public async Task<IActionResult> Delete(int listingId)
     {
-        return View();
+        if (!await _listingService.ListingExistsAsync(listingId))
+        {
+            return NotFound();
+        }
+
+        if (!await _listingService.IsOwnerAsync(listingId, User.Id()))
+        {
+            return Forbid();
+        }
+        
+        await _listingService.DeleteListingAsync(listingId);
+        
+        return RedirectToAction(nameof(Index));
     }
 }

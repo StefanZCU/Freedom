@@ -3,6 +3,7 @@ using Freedom.Core.Models.Listing;
 using Freedom.Core.Models.Worker;
 using Freedom.Infrastructure.Data.Common;
 using Freedom.Infrastructure.Data.Models;
+using Freedom.Infrastructure.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace Freedom.Core.Services;
@@ -64,7 +65,7 @@ public class ListingService : IListingService
             .ToListAsync();
     }
 
-    public async Task<bool> WorkerTypeCategoryExistsAsync(int workerTypeCategoryId) 
+    public async Task<bool> WorkerTypeCategoryExistsAsync(int workerTypeCategoryId)
         => await _repository.AllReadOnly<WorkerTypeCategory>().AnyAsync(wtc => wtc.Id == workerTypeCategoryId);
 
 
@@ -79,10 +80,10 @@ public class ListingService : IListingService
             WorkerTypeCategoryId = model.WorkerTypeCategoryId,
             UploaderId = userId
         };
-        
+
         await _repository.AddAsync(listing);
         await _repository.SaveChangesAsync();
-        
+
         return listing.Id;
     }
 
@@ -100,9 +101,9 @@ public class ListingService : IListingService
                 WorkerTypeCategoryId = l.WorkerTypeCategoryId
             })
             .FirstAsync();
-        
+
         listing.WorkerTypeCategories = await AllWorkerTypeCategoriesAsync();
-        
+
         return listing;
     }
 
@@ -112,22 +113,31 @@ public class ListingService : IListingService
             .AnyAsync(l => l.Id == listingId && l.UploaderId == userId);
     }
 
-    public async Task EditListingAsync(int listingId, ListingFormModel model)
+    public async Task<bool> EditListingAsync(int listingId, ListingFormModel model)
     {
-        var listing = await _repository.GetByIdAsync<Listing>(listingId);
-        
-        listing.Title = model.Title;
-        listing.Description = model.Description;
-        listing.LocationAddress = model.LocationAddress;
+        var listing = await _repository
+            .All<Listing>()
+            .FirstOrDefaultAsync(l => l.Id == listingId && l.ListingStatus == ListingStatus.Active);
+
+        if (listing == null)
+        {
+            return false;
+        }
+
+        listing.Title = model.Title.Trim();
+        listing.Description = model.Description.Trim();
+        listing.LocationAddress = model.LocationAddress.Trim();
         listing.Budget = model.Budget;
         listing.WorkerTypeCategoryId = model.WorkerTypeCategoryId;
-        
+
         await _repository.SaveChangesAsync();
+        return true;
     }
 
     public async Task DeleteListingAsync(int listingId)
     {
-        throw new NotImplementedException();
+        await _repository.DeleteAsync<Listing>(listingId);
+        await _repository.SaveChangesAsync();
     }
 
     public Task<bool> ListingExistsAsync(int listingId)

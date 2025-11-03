@@ -20,7 +20,7 @@ public interface IListingService
 
     Task<bool> IsOwnerAsync(int listingId, string userId);
     
-    Task EditListingAsync(int listingId, ListingFormModel model);
+    Task<bool> EditListingAsync(int listingId, ListingFormModel model);
     
     Task DeleteListingAsync(int listingId);
     
