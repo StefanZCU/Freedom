@@ -7,21 +7,21 @@ namespace Freedom.Core.Models.Listing;
 
 public class ListingFormModel
 {
-    [Required(ErrorMessage = RequiredFieldError)]
+    [Required(ErrorMessage = RequiredFieldListingError)]
     [StringLength(
         maximumLength: ListingTitleMaxLength,
         MinimumLength = ListingTitleMinLength,
         ErrorMessage = InvalidFieldLengthError)]
     public required string Title { get; set; }
 
-    [Required(ErrorMessage = RequiredFieldError)]
+    [Required(ErrorMessage = RequiredFieldListingError)]
     [StringLength(
         maximumLength: ListingDescriptionMaxLength,
         MinimumLength = ListingDescriptionMinLength,
         ErrorMessage = InvalidFieldLengthError)]
     public required string Description { get; set; }
 
-    [Required(ErrorMessage = RequiredFieldError)]
+    [Required(ErrorMessage = RequiredFieldListingError)]
     [StringLength(
         maximumLength: ListingLocationAddressMaxLength,
         MinimumLength = ListingLocationAddressMinLength,
@@ -29,7 +29,7 @@ public class ListingFormModel
     [Display(Name = "Location Address")]
     public required string LocationAddress { get; set; }
 
-    [Required(ErrorMessage = RequiredFieldError)]
+    [Required(ErrorMessage = RequiredFieldListingError)]
     [Range(typeof(decimal),
         ListingBudgetMinPrice,
         ListingBudgetMaxPrice,

@@ -18,6 +18,12 @@
                         <a asp-controller="Listing" asp-action="Index" class="btn btn-outline-secondary btn-lg">
                             <i class="bi bi-card-checklist me-1"></i> Browse Listings
                         </a>
+                        @if (User.Identity?.IsAuthenticated == true && (ViewBag.HasWorker == null || ViewBag.HasWorker == false))
+                        {
+                            <a asp-controller="Worker" asp-action="Become" class="btn btn-primary btn-lg">
+                                <i class="bi bi-briefcase me-1"></i> Become a Worker
+                            </a>
+                        }
                     </div>
                 </div>
                 <div class="col-lg-5">

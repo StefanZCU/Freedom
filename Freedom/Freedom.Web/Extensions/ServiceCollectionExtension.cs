@@ -12,6 +12,7 @@ public static class ServiceCollectionExtension
     public static IServiceCollection AddApplicationServices(this IServiceCollection services)
     {
         services.AddScoped<IListingService, ListingService>();
+        services.AddScoped<IWorkerService, WorkerService>();
         
         return services;
     }
