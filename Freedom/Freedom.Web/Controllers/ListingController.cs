@@ -81,16 +81,12 @@ public class ListingController : BaseController
     }
 
     [HttpGet]
+    [MustBeUploader]
     public async Task<IActionResult> Edit(int listingId)
     {
         if (!await _listingService.ListingExistsAsync(listingId))
         {
             return NotFound();
-        }
-
-        if (!await _listingService.IsOwnerAsync(listingId, User.Id()))
-        {
-            return Forbid();
         }
         
         var model = await _listingService.GetListingFormModelByIdAsync(listingId);
@@ -100,6 +96,7 @@ public class ListingController : BaseController
     }
 
     [HttpPost]
+    [MustBeUploader]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Edit(int listingId, ListingFormModel model)
     {
@@ -126,6 +123,7 @@ public class ListingController : BaseController
     }
     
     [HttpPost]
+    [MustBeUploader]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Delete(int listingId)
     {
