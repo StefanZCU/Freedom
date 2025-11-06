@@ -188,4 +188,81 @@ public class ListingService : IListingService
 
     public Task<bool> ListingExistsAsync(int listingId)
         => _repository.AllReadOnly<Listing>().AnyAsync(l => l.Id == listingId);
+    
+    public async Task<bool> AssignListingToWorkerAsync(int listingId, int workerId)
+    {
+        var listing = await _repository
+            .All<Listing>()
+            .FirstOrDefaultAsync(l => l.Id == listingId);
+
+        if (listing == null)
+        {
+            return false;
+        }
+
+        if (listing.ListingStatus != ListingStatus.Active)
+        {
+            return false;
+        }
+
+        if (listing.WorkerId != null)
+        {
+            return false;
+        }
+
+        var worker = await _repository
+            .AllReadOnly<Worker>()
+            .Where(w => w.Id == workerId)
+            .FirstOrDefaultAsync();
+
+        if (worker != null && worker.WorkerTypeCategoryId != listing.WorkerTypeCategoryId)
+        {
+            return false;
+        }
+        
+        if (await IsOwnerAsync(listingId, worker.UserId))
+        {
+            return false;
+        }
+
+        listing.WorkerId = workerId;
+        listing.ListingStatus = ListingStatus.Assigned;
+
+        await _repository.SaveChangesAsync();
+        return true;
+    }
+
+    public async Task<bool> CompleteListingAsync(int listingId, int workerId)
+    {
+        var listing = await _repository
+            .All<Listing>()
+            .FirstOrDefaultAsync(l => l.Id == listingId);
+
+        if (listing?.WorkerId == null || listing.WorkerId != workerId)
+        {
+            return false;
+        }
+
+        if (listing.ListingStatus != ListingStatus.Assigned)
+        {
+            return false;
+        }
+        
+        var workerUserId = await _repository
+            .AllReadOnly<Worker>()
+            .Where(w => w.Id == workerId)
+            .Select(w => w.UserId)
+            .FirstOrDefaultAsync();
+
+        if (workerUserId != null && await IsOwnerAsync(listingId, workerUserId))
+        {
+            return false;
+        }
+
+        listing.ListingStatus = ListingStatus.Completed;
+
+        await _repository.SaveChangesAsync();
+        return true;
+
+    }
 }

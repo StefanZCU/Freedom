@@ -25,4 +25,9 @@ public interface IListingService
     Task<bool> DeleteListingAsync(int listingId, string userId);
     
     Task<bool> ListingExistsAsync(int listingId);
+    
+    Task<bool> AssignListingToWorkerAsync(int listingId, int workerId);
+    
+    Task<bool> CompleteListingAsync(int listingId, int workerId);
+    
 }

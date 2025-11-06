@@ -35,4 +35,13 @@ public class WorkerService : IWorkerService
         await _repository.AddAsync(worker);
         await _repository.SaveChangesAsync();
     }
+
+    public async Task<int> GetWorkerIdByUserIdAsync(string userId)
+    {
+        return await _repository
+            .AllReadOnly<Worker>()
+            .Where(w => w.UserId == userId)
+            .Select(w => w.Id)
+            .FirstOrDefaultAsync();
+    }
 }

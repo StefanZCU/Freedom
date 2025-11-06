@@ -2,6 +2,7 @@ using System.Security.Claims;
 using Freedom.Core.Contracts;
 using Freedom.Core.Models.Listing;
 using Freedom.Infrastructure.Data.Models;
+using Freedom.Web.Attributes;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,11 +11,12 @@ namespace Freedom.Web.Controllers;
 public class ListingController : BaseController
 {
     private readonly IListingService _listingService;
+    private readonly IWorkerService _workerService;
 
-    public ListingController(
-        IListingService listingService)
+    public ListingController(IListingService listingService, IWorkerService workerService)
     {
         _listingService = listingService;
+        _workerService = workerService;
     }
 
     [AllowAnonymous]
@@ -136,4 +138,37 @@ public class ListingController : BaseController
         
         return RedirectToAction(nameof(Index));
     }
+
+    [HttpGet]
+    [MustBeAWorker]
+    public async Task<IActionResult> Assign(int listingId)
+    {
+        var workerId = await _workerService.GetWorkerIdByUserIdAsync(User.Id());
+        
+        var ok = await _listingService.AssignListingToWorkerAsync(listingId, workerId);
+
+        if (!ok)
+        {
+            return BadRequest();
+        }
+        
+        return RedirectToAction(nameof(Details), new { listingId });
+    }
+
+    [HttpGet]
+    [MustBeAWorker]
+    public async Task<IActionResult> Complete(int listingId)
+    {
+        var workerId = await _workerService.GetWorkerIdByUserIdAsync(User.Id());
+        
+        var ok = await _listingService.CompleteListingAsync(listingId, workerId);
+
+        if (!ok)
+        {
+            return BadRequest();
+        }
+        
+        return RedirectToAction(nameof(Details), new { listingId });
+    }
+    
 }

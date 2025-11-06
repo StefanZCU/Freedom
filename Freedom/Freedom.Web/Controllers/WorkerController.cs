@@ -1,6 +1,7 @@
 using System.Security.Claims;
 using Freedom.Core.Contracts;
 using Freedom.Core.Models.Worker;
+using Freedom.Web.Attributes;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Freedom.Web.Controllers;
@@ -16,9 +17,22 @@ public class WorkerController : BaseController
         _listingService = listingService;
     }
 
+    [MustBeAWorker]
+    public IActionResult Index()
+    {
+        return View();
+    }
+
     [HttpGet]
     public async Task<IActionResult> Become()
     {
+        var userId = User.Id();
+
+        if (await _workerService.WorkerAlreadyExistsAsync(userId))
+        {
+            return RedirectToAction(nameof(Index));
+        }
+        
         var model = new BecomeWorkerFormModel()
         {
             PhoneNumber = string.Empty,
