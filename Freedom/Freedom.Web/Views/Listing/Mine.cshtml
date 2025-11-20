@@ -1,0 +1,60 @@
+@model IEnumerable<ListingListItemViewModel>
+
+@{
+    ViewData["Title"] = "My Listings";
+}
+
+<h2 class="mb-3">@ViewData["Title"]</h2>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">
+        You haven't uploaded any listings yet.
+    </div>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table table-striped align-middle">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Location</th>
+                    <th>Budget</th>
+                    <th class="text-end">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Title</td>
+                    <td>@item.LocationAddress</td>
+                    <td>@item.Budget.ToString("F2")</td>
+                    
+                    <td class="text-end">
+                        <a asp-action="Details"
+                           asp-route-listingId="@item.Id"
+                           class="btn btn-sm btn-outline-primary me-1">
+                            View
+                        </a>
+                        <a asp-action="Edit"
+                           asp-route-listingId="@item.Id"
+                           class="btn btn-sm btn-outline-secondary me-1">
+                            Edit
+                        </a>
+                        <form asp-action="Delete"
+                              asp-route-listingId="@item.Id"
+                              method="post"
+                              class="d-inline">
+                            <button type="submit" class="btn btn-sm btn-outline-danger">
+                                Delete
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+}

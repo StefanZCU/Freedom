@@ -168,5 +168,12 @@ public class ListingController : BaseController
         
         return RedirectToAction(nameof(Details), new { listingId });
     }
+
+    [HttpGet]
+    public async Task<IActionResult> Mine()
+    {
+        var model = await _listingService.GetListingByUserIdAsync(User.Id());
+        return View(model);
+    }
     
 }

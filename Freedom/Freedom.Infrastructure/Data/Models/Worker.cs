@@ -22,6 +22,8 @@ public class Worker
     [Required]
     [Comment("Worker's years of experience")]
     public int YearsOfExperience { get; set; }
+    
+    public bool IsApproved { get; set; } = false;
 
     [Required]
     [Comment("Worker type category ID")]

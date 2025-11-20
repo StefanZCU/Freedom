@@ -29,5 +29,7 @@ public interface IListingService
     Task<bool> AssignListingToWorkerAsync(int listingId, int workerId);
     
     Task<bool> CompleteListingAsync(int listingId, int workerId);
+
+    Task<IEnumerable<ListingListItemViewModel>> GetListingByUserIdAsync(string userId);
     
 }

@@ -23,6 +23,8 @@ public class ListingService : IListingService
     {
         var query = _repository.AllReadOnly<Listing>();
 
+        query = query.Where(l => l.IsApproved);
+
         var status = f.Status ?? ListingStatus.Active;
         query = query.Where(l => l.ListingStatus == status);
         
@@ -264,5 +266,23 @@ public class ListingService : IListingService
         await _repository.SaveChangesAsync();
         return true;
 
+    }
+
+    public async Task<IEnumerable<ListingListItemViewModel>> GetListingByUserIdAsync(string userId)
+    {
+        var listings = await _repository
+            .AllReadOnly<Listing>()
+            .Where(l => l.UploaderId == userId)
+            .Select(l => new ListingListItemViewModel()
+            {
+                Id = l.Id,
+                Budget = l.Budget,
+                LocationAddress = l.LocationAddress,
+                Title = l.Title,
+                WorkerTypeCategoryId = l.WorkerTypeCategoryId
+            })
+            .ToListAsync();
+
+        return listings;
     }
 }

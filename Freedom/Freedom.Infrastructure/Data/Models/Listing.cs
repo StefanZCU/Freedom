@@ -36,6 +36,8 @@ public class Listing
 
     public ListingStatus ListingStatus { get; set; } = ListingStatus.Active;
 
+    public bool IsApproved { get; set; } = false;
+
     [Required]
     [Comment("Worker type needed for job listing")]
     public int WorkerTypeCategoryId { get; set; }
