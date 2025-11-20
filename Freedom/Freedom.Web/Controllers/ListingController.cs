@@ -39,12 +39,12 @@ public class ListingController : BaseController
     [HttpGet]
     public async Task<IActionResult> Details(int listingId)
     {
-        if (!await _listingService.ListingExistsAsync(listingId))
-        {
-            return NotFound();
-        }
+        var userId = User.Id();
+        var isAdmin = User.IsInRole("Admin");
         
-        var model = await _listingService.ListingDetailsByIdAsync(listingId);
+        var model = await _listingService.GetListingDetailsForUserAsync(listingId, userId, isAdmin);
+        
+        if (model == null) return NotFound();
         return View(model);
     }
 

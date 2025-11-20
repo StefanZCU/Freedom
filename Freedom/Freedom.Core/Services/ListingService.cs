@@ -68,24 +68,31 @@ public class ListingService : IListingService
         return (items, total);
     }
 
-    public async Task<ListingDetailsServiceModel> ListingDetailsByIdAsync(int listingId)
+    public async Task<ListingDetailsServiceModel?> GetListingDetailsForUserAsync(int listingId, string userId, bool isAdmin)
     {
-        return await _repository
+        var listing = await _repository
             .AllReadOnly<Listing>()
-            .Where(l => l.Id == listingId)
+            .Where(l => l.Id == listingId 
+                && (l.IsApproved 
+                    || isAdmin 
+                    || l.UploaderId == userId))
             .Select(l => new ListingDetailsServiceModel()
             {
-                Id = l.Id,
-                Title = l.Title,
-                Description = l.Description,
-                LocationAddress = l.LocationAddress,
                 Budget = l.Budget,
-                WorkerTypeCategory = l.WorkerTypeCategory.Name,
+                Description = l.Description,
+                Id = l.Id,
+                LocationAddress = l.LocationAddress,
+                Title = l.Title,
                 ListingStatus = l.ListingStatus,
                 Uploader = l.Uploader.UserName,
-                Worker = l.Worker.User.UserName ?? "No worker assigned"
+                WorkerTypeCategory = l.WorkerTypeCategory.Name,
+                Worker = l.Worker != null 
+                    ? l.Worker.User.UserName 
+                    : "No worker assigned yet."
             })
-            .FirstAsync();
+            .FirstOrDefaultAsync();
+
+        return listing;
     }
 
     public async Task<IEnumerable<WorkerTypeCategoryServiceModel>> AllWorkerTypeCategoriesAsync()

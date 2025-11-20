@@ -8,7 +8,7 @@ public interface IListingService
 {
     Task<(IEnumerable<ListingListItemViewModel> Items, int TotalCount)> AllAsync(ListingFilterModel filter);
 
-    Task<ListingDetailsServiceModel> ListingDetailsByIdAsync(int listingId);
+    Task<ListingDetailsServiceModel?> GetListingDetailsForUserAsync(int listingId, string userId, bool isAdmin);
     
     Task<IEnumerable<WorkerTypeCategoryServiceModel>> AllWorkerTypeCategoriesAsync();
     
