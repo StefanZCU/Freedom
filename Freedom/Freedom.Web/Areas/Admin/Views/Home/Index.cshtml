@@ -1,0 +1,53 @@
+@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+<h2 class="mb-4">Admin Dashboard</h2>
+
+<div class="row g-3">
+
+    <div class="col-md-4">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title">Pending Listings</h5>
+                <p class="card-text text-muted">Review and approve new listings submitted by users.</p>
+                <a asp-area="Admin"
+                   asp-controller="ListingApproval"
+                   asp-action="Pending"
+                   class="btn btn-primary">
+                    View Pending
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title">Pending Workers</h5>
+                <p class="card-text text-muted">Approve worker profiles waiting for verification.</p>
+                <a asp-area="Admin"
+                   asp-controller="WorkerApproval"
+                   asp-action="Pending"
+                   class="btn btn-primary">
+                    View Pending
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title">System Health</h5>
+                <p class="card-text text-muted">Check the application’s health status.</p>
+                <a asp-controller="Health"
+                   asp-action="Index"
+                   class="btn btn-secondary">
+                    Health Check
+                </a>
+            </div>
+        </div>
+    </div>
+
+</div>
