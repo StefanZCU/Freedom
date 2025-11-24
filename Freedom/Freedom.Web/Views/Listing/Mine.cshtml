@@ -21,6 +21,8 @@ else
                     <th>Title</th>
                     <th>Location</th>
                     <th>Budget</th>
+                    <!-- TODO Add Listing status instead of IsApproved-->
+                    <th>Is Approved</th>
                     <th class="text-end">Actions</th>
                 </tr>
             </thead>
@@ -31,6 +33,7 @@ else
                     <td>@item.Title</td>
                     <td>@item.LocationAddress</td>
                     <td>@item.Budget.ToString("F2")</td>
+                    <td>@item.IsApproved</td>
                     
                     <td class="text-end">
                         <a asp-action="Details"

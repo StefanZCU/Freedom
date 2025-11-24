@@ -34,7 +34,7 @@ public class Listing
     [Comment("Listing budget")]
     public decimal Budget { get; set; }
 
-    public ListingStatus ListingStatus { get; set; } = ListingStatus.Active;
+    public ListingStatus ListingStatus { get; set; } = ListingStatus.Pending;
 
     public bool IsApproved { get; set; } = false;
 

@@ -286,10 +286,51 @@ public class ListingService : IListingService
                 Budget = l.Budget,
                 LocationAddress = l.LocationAddress,
                 Title = l.Title,
-                WorkerTypeCategoryId = l.WorkerTypeCategoryId
+                WorkerTypeCategoryId = l.WorkerTypeCategoryId,
+                IsApproved = l.IsApproved
             })
             .ToListAsync();
 
         return listings;
+    }
+
+    public async Task<IEnumerable<ListingListItemViewModel>> GetPendingListingsAsync()
+    {
+        return await _repository
+            .AllReadOnly<Listing>()
+            .Where(l => !l.IsApproved && l.ListingStatus == ListingStatus.Pending)
+            .Select(l => new ListingListItemViewModel()
+            {
+                Id = l.Id,
+                Budget = l.Budget,
+                LocationAddress = l.LocationAddress,
+                Title = l.Title,
+                WorkerTypeCategoryId = l.WorkerTypeCategoryId,
+                WorkerTypeCategoryName = l.WorkerTypeCategory.Name
+            })
+            .ToListAsync();
+    }
+
+    public async Task<bool> ApproveListingAsync(int listingId)
+    {
+        var listing = await _repository.GetByIdAsync<Listing>(listingId);
+        
+        if (listing == null) return false;
+        
+        listing.IsApproved = true;
+        listing.ListingStatus = ListingStatus.Active;
+        await _repository.SaveChangesAsync();
+        return true;
+    }
+
+    public async Task<bool> RejectListingAsync(int listingId)
+    {
+        var listing = await _repository.GetByIdAsync<Listing>(listingId);
+        
+        if (listing == null) return false;
+
+        listing.ListingStatus = ListingStatus.Rejected;
+        await _repository.SaveChangesAsync();
+        return true;
     }
 }

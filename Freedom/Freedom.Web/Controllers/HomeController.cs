@@ -24,6 +24,7 @@ public class HomeController : BaseController
         if (User.Identity?.IsAuthenticated == true)
         {
             ViewBag.HasWorker = await _workerService.WorkerAlreadyExistsAsync(User.Id());
+            ViewBag.IsAdmin = User.IsInRole("Admin");
         }
         return View();
     }
