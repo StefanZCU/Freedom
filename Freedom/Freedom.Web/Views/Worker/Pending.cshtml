@@ -1,0 +1,33 @@
+@{
+    ViewData["Title"] = "Worker profile pending approval";
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h2 class="card-title h4 mb-3">@ViewData["Title"]</h2>
+                    <p class="card-text">
+                        Your request to become a worker has been received and is currently under review.
+                    </p>
+                    <p class="card-text">
+                        Once an administrator approves your profile, you will be able to access all worker features and manage listings assigned to you.
+                    </p>
+                    <hr />
+                    <p class="text-muted mb-0">
+                        You can continue browsing listings or return to the home page in the meantime.
+                    </p>
+                    <div class="mt-3">
+                        <a asp-controller="Home" asp-action="Index" class="btn btn-primary me-2">
+                            Back to Home
+                        </a>
+                        <a asp-controller="Listing" asp-action="Index" class="btn btn-outline-secondary">
+                            Browse listings
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

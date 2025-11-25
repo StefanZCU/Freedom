@@ -9,4 +9,12 @@ public interface IWorkerService
     Task CreateWorkerAsync(string userId, BecomeWorkerFormModel model);
     
     Task<int> GetWorkerIdByUserIdAsync(string userId);
+    
+    Task<IEnumerable<WorkerViewModel>> GetPendingWorkersAsync();
+    
+    Task<bool> ApproveWorkerAsync(int workerId);
+    
+    Task<bool> RejectWorkerAsync(int workerId);
+    
+    Task<bool> IsWorkerApprovedAsync(int workerId);
 }

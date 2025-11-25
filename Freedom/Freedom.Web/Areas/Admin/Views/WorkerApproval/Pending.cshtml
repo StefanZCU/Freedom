@@ -1,0 +1,79 @@
+@model IEnumerable<WorkerViewModel>
+
+@{
+    ViewData["Title"] = "Pending workers";
+}
+
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col">
+            <h2 class="fw-semibold">@ViewData["Title"]</h2>
+            <p class="text-muted mb-0">
+                These worker profiles are waiting for admin review. Approve to let them operate on the platform or reject to disable them.
+            </p>
+        </div>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info">
+            There are no pending workers at the moment.
+        </div>
+    }
+    else
+    {
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th scope="col">ID</th>
+                                <th scope="col">Phone</th>
+                                <th scope="col">Category</th>
+                                <th scope="col">Experience (years)</th>
+                                <th scope="col" class="text-end">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        @foreach (var w in Model)
+                        {
+                            <tr>
+                                <td>@w.Id</td>
+                                <td>@w.PhoneNumber</td>
+                                <td>@w.WorkerTypeCategory</td>
+                                <td>@w.YearsOfExperience</td>
+                                <td class="text-end">
+                                    <form asp-area="Admin"
+                                          asp-controller="WorkerApproval"
+                                          asp-action="Approve"
+                                          method="post"
+                                          class="d-inline">
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="id" value="@w.Id" />
+                                        <button type="submit" class="btn btn-sm btn-success me-1">
+                                            Approve
+                                        </button>
+                                    </form>
+
+                                    <form asp-area="Admin"
+                                          asp-controller="WorkerApproval"
+                                          asp-action="Reject"
+                                          method="post"
+                                          class="d-inline">
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="id" value="@w.Id" />
+                                        <button type="submit" class="btn btn-sm btn-outline-danger">
+                                            Reject
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    }
+</div>

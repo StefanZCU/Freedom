@@ -33,6 +33,14 @@ public class MustBeAWorkerFilter : IAsyncActionFilter
             context.Result = new RedirectToActionResult("Become", "Worker", null);
             return;
         }
+        
+        var workerId = await _workerService.GetWorkerIdByUserIdAsync(userId);
+
+        if (!await _workerService.IsWorkerApprovedAsync(workerId))
+        {
+            context.Result = new RedirectToActionResult("Pending", "Worker", null);
+            return;
+        }
 
         await next();
     }

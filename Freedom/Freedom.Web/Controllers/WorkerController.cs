@@ -63,4 +63,26 @@ public class WorkerController : BaseController
         
         return RedirectToAction("Index", "Home");
     }
+    
+    [HttpGet]
+    public async Task<IActionResult> Pending()
+    {
+        var userId = User.Id();
+        
+        var isWorker = await _workerService.WorkerAlreadyExistsAsync(userId);
+
+        if (!isWorker)
+        {
+            return RedirectToAction(nameof(Become));
+        }
+        
+        var workerId = await _workerService.GetWorkerIdByUserIdAsync(User.Id());
+        
+        if (await _workerService.IsWorkerApprovedAsync(workerId))
+        {
+            return RedirectToAction(nameof(Index));
+        }
+        
+        return View();
+    }
 }

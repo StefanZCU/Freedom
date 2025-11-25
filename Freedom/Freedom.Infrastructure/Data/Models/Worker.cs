@@ -25,10 +25,6 @@ public class Worker
     public int YearsOfExperience { get; set; }
     
     [Required]
-    [Comment("Worker's rating")]
-    public bool IsApproved { get; set; } = false;
-    
-    [Required]
     [Comment("Worker status")]
     public WorkerStatus WorkerStatus { get; set; } = WorkerStatus.Pending;
 
