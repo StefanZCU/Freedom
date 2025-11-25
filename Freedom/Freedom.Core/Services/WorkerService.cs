@@ -87,4 +87,10 @@ public class WorkerService : IWorkerService
     {
         return await _repository.AllReadOnly<Worker>().AnyAsync(w => w.Id == workerId && w.WorkerStatus == WorkerStatus.Active);
     }
+
+    public async Task<bool> IsWorkerRejectedAsync(int workerId)
+    {
+        return await _repository.AllReadOnly<Worker>()
+            .AnyAsync(w => w.Id == workerId && w.WorkerStatus == WorkerStatus.Rejected);
+    }
 }

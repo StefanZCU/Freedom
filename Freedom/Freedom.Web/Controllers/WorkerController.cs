@@ -27,13 +27,24 @@ public class WorkerController : BaseController
     public async Task<IActionResult> Become()
     {
         var userId = User.Id();
+        var workerId = await _workerService.GetWorkerIdByUserIdAsync(userId);
 
-        if (await _workerService.WorkerAlreadyExistsAsync(userId))
+        if (workerId != 0)
         {
-            return RedirectToAction(nameof(Index));
+            if (await _workerService.IsWorkerRejectedAsync(workerId))
+            {
+                return RedirectToAction(nameof(Rejected));
+            }
+
+            if (await _workerService.IsWorkerApprovedAsync(workerId))
+            {
+                return RedirectToAction(nameof(Index));
+            }
+
+            return RedirectToAction(nameof(Pending));
         }
-        
-        var model = new BecomeWorkerFormModel()
+
+        var model = new BecomeWorkerFormModel
         {
             PhoneNumber = string.Empty,
             WorkerTypeCategories = await _listingService.AllWorkerTypeCategoriesAsync()
@@ -83,6 +94,30 @@ public class WorkerController : BaseController
             return RedirectToAction(nameof(Index));
         }
         
+        return View();
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> Rejected()
+    {
+        var userId = User.Id();
+        var workerId = await _workerService.GetWorkerIdByUserIdAsync(userId);
+
+        if (workerId == 0)
+        {
+            return RedirectToAction(nameof(Become));
+        }
+
+        if (await _workerService.IsWorkerApprovedAsync(workerId))
+        {
+            return RedirectToAction(nameof(Index));
+        }
+
+        if (!await _workerService.IsWorkerRejectedAsync(workerId))
+        {
+            return RedirectToAction(nameof(Pending));
+        }
+
         return View();
     }
 }

@@ -17,4 +17,6 @@ public interface IWorkerService
     Task<bool> RejectWorkerAsync(int workerId);
     
     Task<bool> IsWorkerApprovedAsync(int workerId);
+    
+    Task<bool> IsWorkerRejectedAsync(int workerId);
 }

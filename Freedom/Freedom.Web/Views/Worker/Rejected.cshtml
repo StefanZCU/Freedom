@@ -1,0 +1,33 @@
+@{
+    ViewData["Title"] = "Worker application rejected";
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h2 class="card-title h4 mb-3">@ViewData["Title"]</h2>
+                    <p class="card-text">
+                        Your request to become a worker has been reviewed and was <strong>rejected</strong>.
+                    </p>
+                    <p class="card-text">
+                        If you believe this was a mistake or your situation has changed, you may try to apply again in the future.
+                    </p>
+                    <hr />
+                    <p class="text-muted mb-0">
+                        You can return to the home page or browse listings while logged in as a regular user.
+                    </p>
+                    <div class="mt-3">
+                        <a asp-controller="Home" asp-action="Index" class="btn btn-primary me-2">
+                            Back to Home
+                        </a>
+                        <a asp-controller="Listing" asp-action="Index" class="btn btn-outline-secondary">
+                            Browse listings
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
