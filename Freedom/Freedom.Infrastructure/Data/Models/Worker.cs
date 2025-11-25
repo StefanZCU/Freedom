@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Freedom.Infrastructure.Enums;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using static Freedom.Infrastructure.Constants.DataConstants;
@@ -23,7 +24,13 @@ public class Worker
     [Comment("Worker's years of experience")]
     public int YearsOfExperience { get; set; }
     
+    [Required]
+    [Comment("Worker's rating")]
     public bool IsApproved { get; set; } = false;
+    
+    [Required]
+    [Comment("Worker status")]
+    public WorkerStatus WorkerStatus { get; set; } = WorkerStatus.Pending;
 
     [Required]
     [Comment("Worker type category ID")]

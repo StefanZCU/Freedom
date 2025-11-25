@@ -1,4 +1,5 @@
 @model IEnumerable<ListingListItemViewModel>
+@inject IListingService ListingsService
 
 @{
     ViewData["Title"] = "My Listings";
@@ -50,11 +51,14 @@ else
                                    class="btn btn-sm btn-outline-primary me-1">
                                     View
                                 </a>
-                                <a asp-action="Edit"
-                                   asp-route-listingId="@item.Id"
-                                   class="btn btn-sm btn-outline-secondary me-1">
-                                    Edit
-                                </a>
+                                @if (!await ListingsService.IsWorkerAssignedAsync(item.Id))
+                                {
+                                    <a asp-action="Edit"
+                                       asp-route-listingId="@item.Id"
+                                       class="btn btn-sm btn-outline-secondary me-1">
+                                        Edit
+                                    </a>
+                                }
                                 <form asp-action="Delete"
                                       asp-route-listingId="@item.Id"
                                       method="post"
