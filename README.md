@@ -88,7 +88,10 @@ The app includes a dedicated **Admin Area** under `/Admin`, with its own control
 Admins can:
 
 - **Approve** a listing → it becomes public  
-- **Reject** a listing → set to `Rejected` and archived  
+- **Reject** a listing → set to `Rejected` and archived
+
+- - **Approve** a worker → can take listings that have not already been taken  
+- **Reject** a worker → set to `Rejected` and will essentially be kept as a normal user  
 
 ---
 
@@ -107,7 +110,8 @@ Properties:
 
 ### Worker
 
-Represents a worker who can claim listings (worker approval coming next).
+Represents a worker who can claim listings.
+Must be approved by an admin in order to take listings.
 
 ### WorkerTypeCategory
 
@@ -173,7 +177,7 @@ Role: Admin
 ## 🧭 Roadmap
 
 - √ Listing approval workflow  
-- → Worker approval workflow  
+- √ Worker approval workflow  
 - → Worker profiles 
 - → Improved public UI  
 - → AI-powered meal planning app (separate project)
