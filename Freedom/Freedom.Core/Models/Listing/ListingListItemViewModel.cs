@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Freedom.Infrastructure.Enums;
 
 namespace Freedom.Core.Models.Listing;
 
@@ -18,4 +19,6 @@ public class ListingListItemViewModel
     public string WorkerTypeCategoryName { get; set; } = "";
     
     public bool IsApproved { get; set; }
+
+    public string ListingStatus { get; set; } = "";
 }

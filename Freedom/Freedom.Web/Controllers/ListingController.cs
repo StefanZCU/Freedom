@@ -84,11 +84,11 @@ public class ListingController : BaseController
     [MustBeUploader]
     public async Task<IActionResult> Edit(int listingId)
     {
-        if (!await _listingService.ListingExistsAsync(listingId))
+        if (!await _listingService.ListingExistsAsync(listingId) || await _listingService.IsWorkerAssignedAsync(listingId))
         {
             return NotFound();
         }
-        
+
         var model = await _listingService.GetListingFormModelByIdAsync(listingId);
         
         ViewBag.ListingId = listingId;

@@ -20,6 +20,8 @@ public interface IListingService
 
     Task<bool> IsOwnerAsync(int listingId, string userId);
     
+    Task<bool> IsWorkerAssignedAsync(int listingId);
+    
     Task<bool> EditListingAsync(int listingId, ListingFormModel model, string userId);
     
     Task<bool> DeleteListingAsync(int listingId, string userId);

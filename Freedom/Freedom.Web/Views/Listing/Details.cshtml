@@ -67,7 +67,7 @@
 
                 @if (workerId != 0
                      && Model.ListingStatus == ListingStatus.Active
-                     && Model.Worker == "No worker assigned")
+                     && Model.Worker == "No worker assigned yet.")
                 {
                     <a asp-action="Assign" asp-route-listingId="@Model.Id" class="btn btn-success">
                         Take this job

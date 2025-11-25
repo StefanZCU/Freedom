@@ -2,6 +2,10 @@
 
 @{
     ViewData["Title"] = "My Listings";
+
+    var groupedListings = Model
+        .GroupBy(l => l.ListingStatus)
+        .OrderBy(g => g.Key);
 }
 
 <h2 class="mb-3">@ViewData["Title"]</h2>
@@ -14,50 +18,57 @@
 }
 else
 {
-    <div class="table-responsive">
-        <table class="table table-striped align-middle">
-            <thead>
-                <tr>
-                    <th>Title</th>
-                    <th>Location</th>
-                    <th>Budget</th>
-                    <!-- TODO Add Listing status instead of IsApproved-->
-                    <th>Is Approved</th>
-                    <th class="text-end">Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>@item.Title</td>
-                    <td>@item.LocationAddress</td>
-                    <td>@item.Budget.ToString("F2")</td>
-                    <td>@item.IsApproved</td>
-                    
-                    <td class="text-end">
-                        <a asp-action="Details"
-                           asp-route-listingId="@item.Id"
-                           class="btn btn-sm btn-outline-primary me-1">
-                            View
-                        </a>
-                        <a asp-action="Edit"
-                           asp-route-listingId="@item.Id"
-                           class="btn btn-sm btn-outline-secondary me-1">
-                            Edit
-                        </a>
-                        <form asp-action="Delete"
-                              asp-route-listingId="@item.Id"
-                              method="post"
-                              class="d-inline">
-                            <button type="submit" class="btn btn-sm btn-outline-danger">
-                                Delete
-                            </button>
-                        </form>
-                    </td>
-                </tr>
-            }
-            </tbody>
-        </table>
-    </div>
+    foreach (var group in groupedListings)
+    {
+        <div class="mb-4">
+            <h4 class="mb-2">
+                @group.Key
+            </h4>
+
+            <div class="table-responsive">
+                <table class="table table-striped align-middle">
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Location</th>
+                            <th>Budget</th>
+                            <th>Status</th>
+                            <th class="text-end">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (var item in group)
+                    {
+                        <tr>
+                            <td>@item.Title</td>
+                            <td>@item.LocationAddress</td>
+                            <td>@item.Budget.ToString("F2")</td>
+                            <td>@item.ListingStatus</td>
+                            <td class="text-end">
+                                <a asp-action="Details"
+                                   asp-route-listingId="@item.Id"
+                                   class="btn btn-sm btn-outline-primary me-1">
+                                    View
+                                </a>
+                                <a asp-action="Edit"
+                                   asp-route-listingId="@item.Id"
+                                   class="btn btn-sm btn-outline-secondary me-1">
+                                    Edit
+                                </a>
+                                <form asp-action="Delete"
+                                      asp-route-listingId="@item.Id"
+                                      method="post"
+                                      class="d-inline">
+                                    <button type="submit" class="btn btn-sm btn-outline-danger">
+                                        Delete
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
 }

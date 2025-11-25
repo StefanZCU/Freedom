@@ -154,12 +154,19 @@ public class ListingService : IListingService
             .AnyAsync(l => l.Id == listingId && l.UploaderId == userId);
     }
 
+    public async Task<bool> IsWorkerAssignedAsync(int listingId)
+    {
+        return await _repository
+            .AllReadOnly<Listing>()
+            .Where(l => l.Id == listingId && l.WorkerId != null)
+            .AnyAsync();
+    }
+
     public async Task<bool> EditListingAsync(int listingId, ListingFormModel model, string userId)
     {
         var listing = await _repository
             .All<Listing>()
-            .FirstOrDefaultAsync(l => l.Id == listingId 
-                                      && l.ListingStatus == ListingStatus.Active
+            .FirstOrDefaultAsync(l => l.Id == listingId
                                       && l.WorkerId == null
                                       && l.UploaderId == userId);
 
@@ -279,7 +286,7 @@ public class ListingService : IListingService
     {
         var listings = await _repository
             .AllReadOnly<Listing>()
-            .Where(l => l.UploaderId == userId)
+            .Where(l => l.UploaderId == userId && l.ListingStatus != ListingStatus.Archived)
             .Select(l => new ListingListItemViewModel()
             {
                 Id = l.Id,
@@ -287,7 +294,8 @@ public class ListingService : IListingService
                 LocationAddress = l.LocationAddress,
                 Title = l.Title,
                 WorkerTypeCategoryId = l.WorkerTypeCategoryId,
-                IsApproved = l.IsApproved
+                IsApproved = l.IsApproved,
+                ListingStatus = l.ListingStatus.ToString()
             })
             .ToListAsync();
 

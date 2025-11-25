@@ -12,8 +12,8 @@ public static class DataConstants
     public const int ListingLocationAddressMinLength = 10;
     public const int ListingLocationAddressMaxLength = 70;
 
-    public const string ListingBudgetMinPrice = "1.00";
-    public const string ListingBudgetMaxPrice = "10000.00";
+    public const string ListingBudgetMinPrice = "1";
+    public const string ListingBudgetMaxPrice = "10000";
     
     
     //Worker
