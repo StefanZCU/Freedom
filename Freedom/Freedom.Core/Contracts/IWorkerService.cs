@@ -19,4 +19,6 @@ public interface IWorkerService
     Task<bool> IsWorkerApprovedAsync(int workerId);
     
     Task<bool> IsWorkerRejectedAsync(int workerId);
+    
+    Task<WorkerDashboardViewModel> GetWorkerDashboardViewModelAsync(int workerId, IEnumerable<WorkerListingViewModel> workerListingViewModel);
 }

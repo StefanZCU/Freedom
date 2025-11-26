@@ -302,6 +302,23 @@ public class ListingService : IListingService
         return listings;
     }
 
+    public async Task<IEnumerable<WorkerListingViewModel>> GetAllListingsForWorkerAsync(int workerId)
+    {
+        return await _repository
+            .AllReadOnly<Listing>()
+            .Where(l => l.WorkerId == workerId)
+            .Select(l => new WorkerListingViewModel()
+            {
+                Id = l.Id,
+                Budget = l.Budget,
+                LocationAddress = l.LocationAddress,
+                Title = l.Title,
+                ListingStatus = l.ListingStatus,
+                UploaderEmail = l.Uploader.Email
+            })
+            .ToListAsync();
+    }
+
     public async Task<IEnumerable<ListingListItemViewModel>> GetPendingListingsAsync()
     {
         return await _repository

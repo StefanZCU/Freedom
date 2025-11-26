@@ -34,6 +34,8 @@ public interface IListingService
 
     Task<IEnumerable<ListingListItemViewModel>> GetListingByUserIdAsync(string userId);
     
+    Task<IEnumerable<WorkerListingViewModel>> GetAllListingsForWorkerAsync(int workerId);
+    
     Task<IEnumerable<ListingListItemViewModel>> GetPendingListingsAsync();
     
     Task<bool> ApproveListingAsync(int listingId);

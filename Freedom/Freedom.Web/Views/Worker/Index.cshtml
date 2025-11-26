@@ -1,12 +1,128 @@
-<div class="container mt-5">
-    <h2 class="mb-4">Worker Dashboard</h2>
-    <p class="lead">Welcome to your worker dashboard. Here’s what you can do:</p>
-    <ul>
-        <li>View listings that match your category</li>
-        <li>See which listings are assigned to you</li>
-        <li>Manage your profile and experience</li>
-    </ul>
-    <div class="mt-4">
-        <a asp-controller="Listing" asp-action="Index" class="btn btn-primary">Browse Listings</a>
+@model Freedom.Core.Models.Worker.WorkerDashboardViewModel
+
+@{
+    ViewData["Title"] = "Worker Dashboard";
+}
+
+<div class="container mt-4">
+
+    <h2 class="mb-4 fw-bold">Worker Dashboard</h2>
+
+    @if (Model.WorkerStatus == Freedom.Infrastructure.Enums.WorkerStatus.Pending)
+    {
+        <div class="alert alert-warning">
+            <strong>Status:</strong> Your worker account is <strong>Pending approval</strong>.
+        </div>
+    }
+    else if (Model.WorkerStatus == Freedom.Infrastructure.Enums.WorkerStatus.Rejected)
+    {
+        <div class="alert alert-danger">
+            <strong>Status:</strong> Your worker account has been <strong>Rejected</strong>.
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-success">
+            <strong>Status:</strong> Your worker account is <strong>Active</strong>.
+        </div>
+    }
+
+    <div class="row">
+        <div class="col-lg-4 mb-4">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <h5 class="card-title mb-3 fw-bold">Your Profile</h5>
+                    <p class="mb-1"><strong>Email:</strong> @Model.WorkerEmail</p>
+                    <p class="mb-1"><strong>Phone:</strong> @Model.PhoneNumber</p>
+                    <p class="mb-1"><strong>Experience:</strong> @Model.YearsOfExperience years</p>
+                    <p class="mb-0"><strong>Status:</strong> @Model.WorkerStatus</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-8 mb-4">
+            <div class="row g-3">
+
+                <div class="col-md-4">
+                    <div class="card text-bg-primary shadow-sm">
+                        <div class="card-body text-center">
+                            <h6>Total Listings</h6>
+                            <h2>@Model.TotalListings</h2>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="card text-bg-info shadow-sm">
+                        <div class="card-body text-center">
+                            <h6>Assigned</h6>
+                            <h2>@Model.TotalAssignedListings</h2>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="card text-bg-success shadow-sm">
+                        <div class="card-body text-center">
+                            <h6>Completed</h6>
+                            <h2>@Model.TotalCompletedListings</h2>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
     </div>
+
+    <div class="card shadow-sm border-0">
+        <div class="card-body">
+            <h5 class="card-title fw-bold mb-3">Your Listings</h5>
+
+            @if (!Model.Listings.Any())
+            {
+                <p class="text-muted">You have no listings assigned yet.</p>
+            }
+            else
+            {
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover align-middle">
+                        <thead class="table-dark">
+                            <tr>
+                                <th scope="col">Id</th>
+                                <th scope="col">Title</th>
+                                <th scope="col">Status</th>
+                                <th scope="col">Budget</th>
+                                <th scope="col">Location</th>
+                                <th scope="col">Uploader</th>
+                                <th scope="col"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        @foreach (var listing in Model.Listings)
+                        {
+                            <tr>
+                                <td>@listing.Id</td>
+                                <td>@listing.Title</td>
+                                <td>@listing.ListingStatus</td>
+                                <td>@listing.Budget</td>
+                                <td>@listing.LocationAddress</td>
+                                <td>@listing.UploaderEmail</td>
+                                <td>
+                                    <a asp-controller="Listing"
+                                       asp-action="Details"
+                                       asp-route-listingId="@listing.Id"
+                                       class="btn btn-sm btn-outline-primary">
+                                        View
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+    </div>
+
 </div>

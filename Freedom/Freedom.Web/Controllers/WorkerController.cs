@@ -17,10 +17,16 @@ public class WorkerController : BaseController
         _listingService = listingService;
     }
 
+    [HttpGet]
     [MustBeAWorker]
-    public IActionResult Index()
+    public async Task<IActionResult> Index()
     {
-        return View();
+        var userId = User.Id();
+        var workerId = await _workerService.GetWorkerIdByUserIdAsync(userId);
+        var workerListings = await _listingService.GetAllListingsForWorkerAsync(workerId);
+        var dashboardModel = await _workerService.GetWorkerDashboardViewModelAsync(workerId, workerListings);
+        
+        return View(dashboardModel);
     }
 
     [HttpGet]
