@@ -1,0 +1,122 @@
+Freedom Project – Seed Accounts & Listings Overview
+================================================
+
+GUEST ACCOUNTS
+---------------
+Guest 1
+  Email: guest1@gmail.com
+  Password: guest123
+  Uploads listings: 1, 3
+
+Guest 2
+  Email: guest2@gmail.com
+  Password: guest123
+  Uploads listings: 2, 5
+
+Guest 3
+  Email: guest3@gmail.com
+  Password: guest123
+  Uploads listings: 4, 6
+
+
+WORKER ACCOUNTS
+----------------
+Plumber Worker
+  Email: plumber.worker@gmail.com
+  Password: worker123
+  WorkerId: 1
+  Category: Plumber
+  Status: Active
+  Phone: +359888111111
+  Experience: 12 yrs
+
+Electrician Worker
+  Email: electric.worker@gmail.com
+  Password: worker123
+  WorkerId: 2
+  Category: Electrician
+  Status: Rejected
+  Phone: +359888222222
+  Experience: 8 yrs
+
+Gardener Worker
+  Email: gardener.worker@gmail.com
+  Password: worker123
+  WorkerId: 3
+  Category: Gardener
+  Status: Pending
+  Phone: +359888333333
+  Experience: 5 yrs
+
+Cleaner Worker
+  Email: cleaner.worker@gmail.com
+  Password: worker123
+  WorkerId: 4
+  Category: Cleaner
+  Status: Active
+  Phone: +359888444444
+  Experience: 2 yrs
+
+
+LISTINGS OVERVIEW
+------------------
+
+Listing 1 – PlumbingCompleteListing
+  Id: 1
+  Status: Completed
+  Title: Plumber needed ASAP for major leak
+  Category: Plumber
+  Uploader: Guest 1
+  Worker: Plumber Worker (Id 1)
+  Budget: 1000
+  Address: ul. "Tsar Osvoboditel" 13, Sofia
+
+Listing 2 – ElectricInspectionPendingListing
+  Id: 2
+  Status: Pending
+  Title: Electrical inspection for office space
+  Category: Electrician
+  Uploader: Guest 2
+  Worker: None
+  Budget: 1500
+  Address: bul. "Vitosha" 42, Sofia
+
+Listing 3 – GardeningAssignedListing
+  Id: 3
+  Status: Assigned
+  Title: Ongoing garden maintenance for family house
+  Category: Gardener
+  Uploader: Guest 1
+  Worker: None
+  Budget: 600
+  Address: ul. "Shipka" 7, Plovdiv
+
+Listing 4 – CleaningCompletedListing
+  Id: 4
+  Status: Completed
+  Title: One-time deep cleaning after renovation
+  Category: Cleaner
+  Uploader: Guest 3
+  Worker: Cleaner Worker (Id 4)
+  Budget: 400
+  Address: ul. "Graf Ignatiev" 19, Sofia
+
+Listing 5 – PlumbingAssignedListing
+  Id: 5
+  Status: Assigned
+  Title: Bathroom fixture installation
+  Category: Plumber
+  Uploader: Guest 2
+  Worker: Plumber Worker (Id 1)
+  Budget: 800
+  Address: ul. "Patriarh Evtimiy" 5, Sofia
+
+Listing 6 – ElectricRejectedListing
+  Id: 6
+  Status: Rejected
+  Title: Lighting upgrade for small shop
+  Category: Electrician
+  Uploader: Guest 3
+  Worker: None
+  Budget: 900
+  Address: ul. "Rakovski" 102, Sofia

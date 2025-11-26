@@ -10,6 +10,6 @@ public class WorkerConfiguration : IEntityTypeConfiguration<Worker>
     {
         var data = new SeedData();
 
-        builder.HasData(data.Worker);
+        builder.HasData(data.PlumberWorker, data.ElectricianWorker, data.GardenerWorker, data.CleanerWorker);
     }
 }

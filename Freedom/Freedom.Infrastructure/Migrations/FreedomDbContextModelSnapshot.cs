@@ -4,7 +4,6 @@ using Freedom.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -12,15 +11,13 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Freedom.Infrastructure.Migrations
 {
     [DbContext(typeof(FreedomDbContext))]
-    [Migration("20251120074831_AddedApprovalSystem")]
-    partial class AddedApprovalSystem
+    partial class FreedomDbContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.21")
+                .HasAnnotation("ProductVersion", "10.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -93,38 +90,76 @@ namespace Freedom.Infrastructure.Migrations
                         {
                             Id = 1,
                             Budget = 1000.00m,
-                            Description = "We are in need of a plumber with at least 5 years of experience to come fix the leak in our bathroom!",
+                            Description = "Emergency plumbing work required for burst pipe in apartment. Must arrive within 2 hours.",
                             IsApproved = false,
-                            ListingStatus = 0,
+                            ListingStatus = 2,
                             LocationAddress = "ul. \"Tsar Osvoboditel\" 13, Sofia, Bulgaria - 1000",
-                            Title = "Plumber needed ASAP",
-                            UploaderId = "fb9c63c0-cf98-4c08-b9f8-d25b47492c16",
+                            Title = "Plumber needed ASAP for major leak",
+                            UploaderId = "9a473cb5-3465-43f4-853f-ed99ae104ede",
                             WorkerId = 1,
                             WorkerTypeCategoryId = 1
                         },
                         new
                         {
                             Id = 2,
-                            Budget = 1200.00m,
-                            Description = "Looking for a licensed electrician to inspect and repair faulty wiring in a residential apartment. Prior experience with panel upgrades is a plus.",
+                            Budget = 1500.00m,
+                            Description = "Need a certified electrician to inspect wiring before renovation. Not urgent yet, still planning scope.",
                             IsApproved = false,
-                            ListingStatus = 0,
+                            ListingStatus = 5,
                             LocationAddress = "bul. \"Vitosha\" 42, Sofia, Bulgaria - 1000",
-                            Title = "Certified electrician required",
-                            UploaderId = "fb9c63c0-cf98-4c08-b9f8-d25b47492c16",
+                            Title = "Electrical inspection for office space",
+                            UploaderId = "e0c11f37-bf07-4b14-b022-baf80cf652a4",
                             WorkerTypeCategoryId = 2
                         },
                         new
                         {
                             Id = 3,
                             Budget = 600.00m,
-                            Description = "Seeking a reliable gardener to trim hedges, mow the lawn, and refresh flower beds. Long-term maintenance possible if work is solid.",
+                            Description = "Weekly maintenance: trimming hedges, mowing lawn, seasonal planting. Long-term opportunity.",
                             IsApproved = false,
-                            ListingStatus = 0,
+                            ListingStatus = 1,
                             LocationAddress = "ul. \"Shipka\" 7, Plovdiv, Bulgaria - 4000",
-                            Title = "Gardener needed for yard maintenance",
-                            UploaderId = "fb9c63c0-cf98-4c08-b9f8-d25b47492c16",
+                            Title = "Ongoing garden maintenance for family house",
+                            UploaderId = "9a473cb5-3465-43f4-853f-ed99ae104ede",
                             WorkerTypeCategoryId = 3
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Budget = 400.00m,
+                            Description = "Apartment just renovated, need full deep clean including windows, balcony, and furniture dust removal.",
+                            IsApproved = false,
+                            ListingStatus = 2,
+                            LocationAddress = "ul. \"Graf Ignatiev\" 19, Sofia, Bulgaria - 1000",
+                            Title = "One-time deep cleaning after renovation",
+                            UploaderId = "20550ad3-a8cd-439e-b6c1-96ee52f00343",
+                            WorkerId = 4,
+                            WorkerTypeCategoryId = 4
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Budget = 800.00m,
+                            Description = "Install new sink, toilet, and shower fixtures. Materials already purchased.",
+                            IsApproved = false,
+                            ListingStatus = 1,
+                            LocationAddress = "ul. \"Patriarh Evtimiy\" 5, Sofia, Bulgaria - 1000",
+                            Title = "Bathroom fixture installation",
+                            UploaderId = "e0c11f37-bf07-4b14-b022-baf80cf652a4",
+                            WorkerId = 1,
+                            WorkerTypeCategoryId = 1
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Budget = 900.00m,
+                            Description = "Replace old halogen lights with LED spots and improve overall lighting layout.",
+                            IsApproved = false,
+                            ListingStatus = 4,
+                            LocationAddress = "ul. \"Rakovski\" 102, Sofia, Bulgaria - 1000",
+                            Title = "Lighting upgrade for small shop",
+                            UploaderId = "20550ad3-a8cd-439e-b6c1-96ee52f00343",
+                            WorkerTypeCategoryId = 2
                         });
                 });
 
@@ -137,9 +172,6 @@ namespace Freedom.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<bool>("IsApproved")
-                        .HasColumnType("bit");
-
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
                         .HasMaxLength(15)
@@ -150,6 +182,10 @@ namespace Freedom.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)")
                         .HasComment("Worker user ID");
+
+                    b.Property<int>("WorkerStatus")
+                        .HasColumnType("int")
+                        .HasComment("Worker status");
 
                     b.Property<int>("WorkerTypeCategoryId")
                         .HasColumnType("int")
@@ -177,11 +213,38 @@ namespace Freedom.Infrastructure.Migrations
                         new
                         {
                             Id = 1,
-                            IsApproved = false,
-                            PhoneNumber = "+359888888888",
-                            UserId = "cd45c24b-4a9a-4022-b626-0760520ac4c5",
+                            PhoneNumber = "+359888111111",
+                            UserId = "a3f6cd13-2457-4b58-ae29-a82f39c7fab2",
+                            WorkerStatus = 0,
                             WorkerTypeCategoryId = 1,
-                            YearsOfExperience = 10
+                            YearsOfExperience = 12
+                        },
+                        new
+                        {
+                            Id = 2,
+                            PhoneNumber = "+359888222222",
+                            UserId = "6db6497d-3169-47c4-9cfd-3409e114ac73",
+                            WorkerStatus = 1,
+                            WorkerTypeCategoryId = 2,
+                            YearsOfExperience = 8
+                        },
+                        new
+                        {
+                            Id = 3,
+                            PhoneNumber = "+359888333333",
+                            UserId = "c1dc1773-9c75-440a-9e98-458a48d4864a",
+                            WorkerStatus = 2,
+                            WorkerTypeCategoryId = 3,
+                            YearsOfExperience = 5
+                        },
+                        new
+                        {
+                            Id = 4,
+                            PhoneNumber = "+359888444444",
+                            UserId = "8fa9d094-d2d3-4e02-b200-63596473c5e9",
+                            WorkerStatus = 0,
+                            WorkerTypeCategoryId = 4,
+                            YearsOfExperience = 2
                         });
                 });
 
@@ -349,35 +412,115 @@ namespace Freedom.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "fb9c63c0-cf98-4c08-b9f8-d25b47492c16",
+                            Id = "9a473cb5-3465-43f4-853f-ed99ae104ede",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "2c3af2d6-7ae6-4f01-89a1-5582946c96de",
-                            Email = "Guest@gmail.com",
-                            EmailConfirmed = false,
+                            ConcurrencyStamp = "e2e2e867-5fe2-498f-b177-bcc18c193d5b",
+                            Email = "guest1@gmail.com",
+                            EmailConfirmed = true,
                             LockoutEnabled = false,
-                            NormalizedEmail = "GUEST@GMAIL.COM",
-                            NormalizedUserName = "GUEST@GMAIL.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAELnyPFPN4pEy4sD0dAJKoS/dLXGog8c4PxrF5ckKn07M/dHSmhb6ZLY9fRRa1wjlOQ==",
+                            NormalizedEmail = "GUEST1@GMAIL.COM",
+                            NormalizedUserName = "GUEST1@GMAIL.COM",
+                            PasswordHash = "AQAAAAIAAYagAAAAEBVRVCFNz7VV470OLDfAw4RAULWtN1AcIIXetIqhazOLakJ/+it0RJ7LKZo2tN+eEA==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "c35c5345-68c5-4e4a-8427-c8131f4768aa",
+                            SecurityStamp = "e573de9a-860a-4cee-8ba0-1f4660bf5b09",
                             TwoFactorEnabled = false,
-                            UserName = "Guest@gmail.com"
+                            UserName = "guest1@gmail.com"
                         },
                         new
                         {
-                            Id = "cd45c24b-4a9a-4022-b626-0760520ac4c5",
+                            Id = "e0c11f37-bf07-4b14-b022-baf80cf652a4",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "4608be1f-89ea-45c1-a32d-6aa729227ace",
-                            Email = "Worker@gmail.com",
-                            EmailConfirmed = false,
+                            ConcurrencyStamp = "4020f964-9ee4-4e7b-939d-6c16b47ed052",
+                            Email = "guest2@gmail.com",
+                            EmailConfirmed = true,
                             LockoutEnabled = false,
-                            NormalizedEmail = "WORKER@GMAIL.COM",
-                            NormalizedUserName = "WORKER@GMAIL.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEDqQmOSpw9Mjn9wrEsffKIATmi/SkROAlMQ7Ic8NoSiP8YMDOZmME8CZ1ag4hrJfnA==",
+                            NormalizedEmail = "GUEST2@GMAIL.COM",
+                            NormalizedUserName = "GUEST2@GMAIL.COM",
+                            PasswordHash = "AQAAAAIAAYagAAAAECr+A1XA8Z+ggfu3y3fWBAWMX2b9icVPX7FJWbzrjyclN2cx0Qe6p33tRNPduG1dIQ==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "340a20f9-a463-43e9-a0c0-1ec697f0256f",
+                            SecurityStamp = "41eb7df6-ac73-4b7e-b519-1076a61c81de",
                             TwoFactorEnabled = false,
-                            UserName = "Worker@gmail.com"
+                            UserName = "guest2@gmail.com"
+                        },
+                        new
+                        {
+                            Id = "20550ad3-a8cd-439e-b6c1-96ee52f00343",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "135b5f06-4ffe-46b5-81ef-142e0e84065e",
+                            Email = "guest3@gmail.com",
+                            EmailConfirmed = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "GUEST3@GMAIL.COM",
+                            NormalizedUserName = "GUEST3@GMAIL.COM",
+                            PasswordHash = "AQAAAAIAAYagAAAAEC/ka6LbA/hGC487fsv3rBuWhjepkKcMPmgkfrY3D73xWhhOVEIwYo7MuUpTHNPJWw==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "5c28cff6-0560-4017-bc15-7ffb41718a8d",
+                            TwoFactorEnabled = false,
+                            UserName = "guest3@gmail.com"
+                        },
+                        new
+                        {
+                            Id = "a3f6cd13-2457-4b58-ae29-a82f39c7fab2",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "80ebff84-1752-4535-b860-d70451d47dd7",
+                            Email = "plumber.worker@gmail.com",
+                            EmailConfirmed = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "PLUMBER.WORKER@GMAIL.COM",
+                            NormalizedUserName = "PLUMBER.WORKER@GMAIL.COM",
+                            PasswordHash = "AQAAAAIAAYagAAAAEOj9qlgzrw7WrKdPlK8PugLFRgR9pZrf9akwv/JpBdKNWqWcpeeZx6l7JLcQCUMl2w==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "a03c4060-f677-4c87-9bc9-f62fbb6cede4",
+                            TwoFactorEnabled = false,
+                            UserName = "plumber.worker@gmail.com"
+                        },
+                        new
+                        {
+                            Id = "6db6497d-3169-47c4-9cfd-3409e114ac73",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "6c20665d-00ae-4a67-ae54-6be78acc776b",
+                            Email = "electric.worker@gmail.com",
+                            EmailConfirmed = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "ELECTRIC.WORKER@GMAIL.COM",
+                            NormalizedUserName = "ELECTRIC.WORKER@GMAIL.COM",
+                            PasswordHash = "AQAAAAIAAYagAAAAEFDcWWy5bnc3G8LNVS11PTAz0CBPHstrbch9+kTr3LlXNMDTQonZ7mJWWfjhBgd5iQ==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "959185b0-bd68-46f4-a465-d66b58eb2737",
+                            TwoFactorEnabled = false,
+                            UserName = "electric.worker@gmail.com"
+                        },
+                        new
+                        {
+                            Id = "c1dc1773-9c75-440a-9e98-458a48d4864a",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "e8e1e4b2-8617-4458-a825-57e53a74ffe3",
+                            Email = "gardener.worker@gmail.com",
+                            EmailConfirmed = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "GARDENER.WORKER@GMAIL.COM",
+                            NormalizedUserName = "GARDENER.WORKER@GMAIL.COM",
+                            PasswordHash = "AQAAAAIAAYagAAAAEGws8tgNm3dW4zdYOYFSVpeJsafoltp5IoZP1rZd9jU6qDpyFhYOjzRgiE9em7YMXw==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "222f4362-f689-43db-9e0c-6f0ab98b696a",
+                            TwoFactorEnabled = false,
+                            UserName = "gardener.worker@gmail.com"
+                        },
+                        new
+                        {
+                            Id = "8fa9d094-d2d3-4e02-b200-63596473c5e9",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "ce25688d-8eac-4596-b191-639457abfb1b",
+                            Email = "cleaner.worker@gmail.com",
+                            EmailConfirmed = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "CLEANER.WORKER@GMAIL.COM",
+                            NormalizedUserName = "CLEANER.WORKER@GMAIL.COM",
+                            PasswordHash = "AQAAAAIAAYagAAAAEDHsSkPILk2/QB+lYmdVjdWu1X2rYvbjjHBbihFhrT90dY9xU5oFVK7JxgCpPinBzw==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "03972e61-913a-4216-81b0-692816b4149c",
+                            TwoFactorEnabled = false,
+                            UserName = "cleaner.worker@gmail.com"
                         });
                 });
 

@@ -10,6 +10,6 @@ public class UserConfiguration : IEntityTypeConfiguration<IdentityUser>
     {
         var data = new SeedData();
         
-        builder.HasData(data.GuestUser, data.WorkerUser);
+        builder.HasData(data.GuestUser1, data.GuestUser2, data.GuestUser3, data.PlumberUser, data.ElectricianUser, data.GardenerUser, data.CleanerUser);
     }
 }

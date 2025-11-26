@@ -10,6 +10,6 @@ public class ListingConfiguration : IEntityTypeConfiguration<Listing>
     {
         var data = new SeedData();
 
-        builder.HasData(data.PlumbingListing, data.ElectricListing, data.GardeningListing);
+        builder.HasData(data.PlumbingCompleteListing, data.ElectricInspectionPendingListing, data.GardeningAssignedListing, data.CleaningCompletedListing, data.PlumbingAssignedListing, data.ElectricRejectedListing);
     }
 }
