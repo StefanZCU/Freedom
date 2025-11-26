@@ -264,7 +264,7 @@ Category: Plumber
 <ul>
   <li>✔ Listing approval workflow</li>
   <li>✔ Worker approval workflow</li>
-  <li>⏳ Worker dashboard</li>
+  <li>✔ Worker dashboard</li>
   <li>⏳ Worker profile pages</li>
   <li>⏳ Improved public UI</li>
   <li>⏳ Additional side projects (e.g., AI-powered meal planner)</li>
