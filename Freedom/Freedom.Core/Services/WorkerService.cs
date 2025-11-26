@@ -1,8 +1,10 @@
+using System.Security.Claims;
 using Freedom.Core.Contracts;
 using Freedom.Core.Models.Worker;
 using Freedom.Infrastructure.Data.Common;
 using Freedom.Infrastructure.Data.Models;
 using Freedom.Infrastructure.Enums;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace Freedom.Core.Services;
@@ -10,10 +12,16 @@ namespace Freedom.Core.Services;
 public class WorkerService : IWorkerService
 {
     private readonly IRepository _repository;
+    private readonly UserManager<IdentityUser> _userManager;
+    private readonly SignInManager<IdentityUser> _signInManager;
 
-    public WorkerService(IRepository repository)
+    public WorkerService(IRepository repository, 
+        UserManager<IdentityUser> userManager, 
+        SignInManager<IdentityUser> signInManager)
     {
         _repository = repository;
+        _userManager = userManager;
+        _signInManager = signInManager;
     }
 
     public async Task<bool> WorkerAlreadyExistsAsync(string userId)
@@ -64,11 +72,24 @@ public class WorkerService : IWorkerService
     public async Task<bool> ApproveWorkerAsync(int workerId)
     {
         var worker = await _repository.GetByIdAsync<Worker>(workerId);
-
         if (worker == null) return false;
 
         worker.WorkerStatus = WorkerStatus.Active;
         await _repository.SaveChangesAsync();
+
+        var user = await _userManager.FindByIdAsync(worker.UserId);
+        if (user == null) return false;
+
+        var claims = await _userManager.GetClaimsAsync(user);
+        bool hasWorkerClaim = claims.Any(c => c.Type == "IsWorker" && c.Value == "true");
+
+        if (!hasWorkerClaim)
+        {
+            await _userManager.AddClaimAsync(user, new Claim("IsWorker", "true"));
+        }
+
+        await _signInManager.RefreshSignInAsync(user);
+
         return true;
     }
 
