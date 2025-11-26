@@ -1,4 +1,4 @@
-# 🚀 Freedom – Service Marketplace (ASP.NET Core MVC)
+<h1 align="center">🚀 Freedom – Service Marketplace (ASP.NET Core MVC)</h1>
 
 <p align="center">
   <strong>A custom service marketplace built with ASP.NET Core MVC</strong><br/>
@@ -12,184 +12,272 @@
   <img src="https://img.shields.io/badge/status-Work%20in%20Progress-yellow" />
 </p>
 
----
+<hr/>
 
 ## 🧠 Project Idea
 
-**Freedom** is a service marketplace where users can create job listings (tasks, gigs, work requests) and connect with workers.
+<p>
+  <strong>Freedom</strong> is a service marketplace where clients create job listings (tasks, gigs, work requests)
+  and connect with workers based on category and availability.
+</p>
 
-The goals:
+<p>The main goals of the project are:</p>
 
-- Build a **realistic, production-style** ASP.NET Core MVC app  
-- Practice **clean architecture**, role-based access, and workflows  
-- Use it as a **portfolio project** to land a remote C#/.NET developer position  
-- Provide a foundation for future extensions (AI meal planner app, advanced worker features, etc.)
+<ul>
+  <li>Build a realistic, production-style <strong>ASP.NET Core MVC</strong> application</li>
+  <li>Practice <strong>clean architecture</strong>, Identity, areas, and admin workflows</li>
+  <li>Use it as a <strong>portfolio project</strong> to land a remote C#/.NET developer position</li>
+  <li>Provide a solid foundation for future extensions and side projects</li>
+</ul>
 
----
+<hr/>
 
 ## ✨ Current Features
 
 ### 👤 Public Users
 
-- Register / log in via ASP.NET Core Identity
-- Create new listings with:
-  - Title, description, budget, category, location address
-- View:
-  - **All approved & active** listings
-  - **My Listings**: your own listings, including pending and rejected
-- Edit or delete your own listings
+<ul>
+  <li>Register / log in via ASP.NET Core Identity</li>
+  <li>Create job listings with:
+    <ul>
+      <li>Title</li>
+      <li>Description</li>
+      <li>Budget</li>
+      <li>Category (worker type)</li>
+      <li>Location address</li>
+    </ul>
+  </li>
+  <li>Browse <strong>approved &amp; active</strong> listings</li>
+  <li>View <strong>My Listings</strong> (including Pending and Rejected)</li>
+  <li>Edit or delete their own listings</li>
+</ul>
 
-### 🛠 Listings Workflow
+<hr/>
 
-Each listing has:
+## 🛠 Listings Workflow
 
-- `ListingStatus`:
-  - `Pending` → waiting for admin review  
-  - `Active` → visible to everyone  
-  - `Rejected` → archived by admin  
-- `IsApproved`:
-  - Controls whether the listing is available publicly
+<p>Each listing has:</p>
 
-Creation flow right now:
+<ul>
+  <li><code>ListingStatus</code>:
+    <ul>
+      <li><code>Pending</code> – created by user, waiting for admin review</li>
+      <li><code>Active</code> – visible to everyone</li>
+      <li><code>Assigned</code> – taken by a worker</li>
+      <li><code>Completed</code> – finished jobs</li>
+      <li><code>Rejected</code> – rejected by admin, not public</li>
+    </ul>
+  </li>
+  <li><code>IsApproved</code> – controls public visibility</li>
+</ul>
 
-1. User creates a listing → `Status = Pending`, `IsApproved = false`
-2. Admin approves → `Status = Active`, `IsApproved = true`
-3. Admin rejects → `Status = Rejected`, `IsApproved = false` (hidden from public, but still stored)
+<p>Current flow:</p>
 
----
+<ol>
+  <li>User creates listing → <code>Status = Pending</code>, <code>IsApproved = false</code></li>
+  <li>Admin approves → <code>Status = Active</code>, <code>IsApproved = true</code></li>
+  <li>Admin rejects → <code>Status = Rejected</code>, <code>IsApproved = false</code></li>
+</ol>
+
+<hr/>
+
+## 👷 Worker System
+
+<p>
+  Any authenticated user can be associated with a <strong>Worker</strong> profile.
+  Workers can be approved or rejected by an admin.
+</p>
+
+<ul>
+  <li>Each worker has:
+    <ul>
+      <li>Phone number</li>
+      <li>Years of experience</li>
+      <li><code>WorkerTypeCategory</code> (Plumber, Electrician, etc.)</li>
+      <li><code>WorkerStatus</code>:
+        <ul>
+          <li><code>Pending</code> – waiting for review</li>
+          <li><code>Active</code> – able to take listings</li>
+          <li><code>Rejected</code> – not allowed to take listings</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>Only <strong>Active</strong> workers are expected to work with assigned jobs</li>
+</ul>
+
+<hr/>
 
 ## 🛡 Admin Area
 
-The app includes a dedicated **Admin Area** under `/Admin`, with its own controllers and views.
+<p>
+  The application includes a dedicated <strong>Admin Area</strong> under
+  <code>/Admin</code> with its own controllers and views.
+</p>
 
-### 🔐 Security
+<h4>🔐 Security</h4>
 
-- Admin area uses:
-  - `AdminBaseController` with:
-    - `[Area("Admin")]`
-    - `[Authorize(Roles = "Admin")]`
-- Only users in the **Admin** role can access it
-- Admin actions that change data use `[ValidateAntiForgeryToken]`
+<ul>
+  <li>Access restricted via:
+    <ul>
+      <li><code>[Area("Admin")]</code></li>
+      <li><code>[Authorize(Roles = "Admin")]</code></li>
+    </ul>
+  </li>
+  <li>Data-changing actions use <code>[ValidateAntiForgeryToken]</code></li>
+</ul>
 
-### 📋 Admin Features
+<h4>📋 Admin Features</h4>
 
-- Admin dashboard at:
+<ul>
+  <li>Admin dashboard at <code>/Admin</code></li>
+  <li>Pending listings management at <code>/Admin/ListingApproval/Pending</code></li>
+  <li>Admin can:
+    <ul>
+      <li><strong>Approve</strong> a listing → becomes publicly visible</li>
+      <li><strong>Reject</strong> a listing → archived as Rejected</li>
+      <li><strong>Approve</strong> a worker → worker can take listings</li>
+      <li><strong>Reject</strong> a worker → treated as a normal user without worker privileges</li>
+    </ul>
+  </li>
+</ul>
 
-  ```
-  /Admin
-  ```
-
-- Pending listings management:
-
-  ```
-  /Admin/ListingApproval/Pending
-  ```
-
-Admins can:
-
-- **Approve** a listing → it becomes public  
-- **Reject** a listing → set to `Rejected` and archived
-
-- - **Approve** a worker → can take listings that have not already been taken  
-- **Reject** a worker → set to `Rejected` and will essentially be kept as a normal user  
-
----
+<hr/>
 
 ## 🧱 Domain Snapshot
 
-### Listing
+<h4>Listing</h4>
 
-Represents a service request.
+<p>Represents a service request / job.</p>
 
-Properties:
+<ul>
+  <li>Id, Title, Description, LocationAddress</li>
+  <li>Budget</li>
+  <li><code>ListingStatus</code>, <code>IsApproved</code></li>
+  <li><code>WorkerTypeCategoryId</code> – required</li>
+  <li><code>UploaderId</code> – Identity user who created the listing</li>
+  <li><code>WorkerId</code> – optional; assigned worker</li>
+</ul>
 
-- Id, Title, Description, LocationAddress  
-- Budget, ListingStatus, IsApproved  
-- WorkerTypeCategoryId, UploaderId  
-- WorkerId (optional)
+<h4>Worker</h4>
 
-### Worker
+<p>Represents a worker that can take jobs.</p>
 
-Represents a worker who can claim listings.
-Must be approved by an admin in order to take listings.
+<ul>
+  <li>Id, PhoneNumber, YearsOfExperience</li>
+  <li><code>WorkerStatus</code> (Pending, Active, Rejected)</li>
+  <li><code>WorkerTypeCategoryId</code></li>
+  <li><code>UserId</code> – 1:1 link to <code>AspNetUsers</code></li>
+</ul>
 
-### WorkerTypeCategory
+<h4>WorkerTypeCategory</h4>
 
-Categories for listings/workers.
+<p>Defines categories for both listings and workers. Seeded examples:</p>
 
----
+<ul>
+  <li>Plumber</li>
+  <li>Electrician</li>
+  <li>Gardener</li>
+  <li>Cleaner</li>
+</ul>
+
+<hr/>
 
 ## 🧪 Tech Stack
 
-- ASP.NET Core 10 MVC  
-- Entity Framework Core 10  
-- SQL Server  
-- Identity  
-- Bootstrap 5  
-- Repository + Service layer architecture  
+<ul>
+  <li><strong>Backend:</strong> ASP.NET Core 10 MVC</li>
+  <li><strong>ORM:</strong> Entity Framework Core 10</li>
+  <li><strong>Database:</strong> SQL Server</li>
+  <li><strong>Auth:</strong> ASP.NET Core Identity</li>
+  <li><strong>UI:</strong> Bootstrap 5</li>
+  <li><strong>Architecture:</strong> Controllers → Services → DbContext (clean layering)</li>
+</ul>
 
----
+<hr/>
 
 ## ▶️ Getting Started
 
-### 1. Clone the repository
+<h4>1. Clone the repository</h4>
 
 ```bash
 git clone https://github.com/stefanzcu/freedom.git
 cd freedom
 ```
 
-### 2. Set up the database
+<h4>2. Configure the database</h4>
 
-Edit `appsettings.json` or `secrets.json` with your SQL connection.
-
-Run migrations:
+<p>Update your connection string in <code>appsettings.json</code> or <code>secrets.json</code>.</p>
 
 ```bash
 dotnet ef database update
 ```
 
-### 3. Run the app
+<h4>3. Run the application</h4>
 
 ```bash
 dotnet run
 ```
 
-### Guest Login
+<hr/>
 
-```
-Email: guest@gmail.com
-Password: guest123
-Role: Normal User
-```
+## 🔑 Seeded Accounts (Quick Reference)
 
+<p>
+  A <strong>full detailed list</strong> of all seeded users, workers, worker statuses,
+  listings, and relationships is available at:
+</p>
 
-### Admin Login
+<pre>
+Freedom.Infrastructure/freedom_seed_overview.txt
+</pre>
 
-```
-Email: admin@freedom.bg
+<h4>Admin Account</h4>
+
+<pre>
+Email:    admin@freedom.bg
 Password: Admin123!
-Role: Admin
-```
+Role:     Admin
+</pre>
 
----
+<h4>Example Regular User</h4>
+
+<pre>
+Email:    guest1@gmail.com
+Password: guest123
+Role:     Normal User
+</pre>
+
+<h4>Example Worker (Active)</h4>
+
+<pre>
+Email:    plumber.worker@gmail.com
+Password: worker123
+Role:     Worker (Active)
+Category: Plumber
+</pre>
+
+<hr/>
 
 ## 🧭 Roadmap
 
-- √ Listing approval workflow  
-- √ Worker approval workflow  
-- → Worker profiles 
-- → Improved public UI  
-- → AI-powered meal planning app (separate project)
+<ul>
+  <li>✔ Listing approval workflow</li>
+  <li>✔ Worker approval workflow</li>
+  <li>⏳ Worker dashboard</li>
+  <li>⏳ Worker profile pages</li>
+  <li>⏳ Improved public UI</li>
+  <li>⏳ Additional side projects (e.g., AI-powered meal planner)</li>
+</ul>
 
----
+<hr/>
 
 ## 🎯 Why this project matters
 
-Freedom demonstrates:
-
-- Real **ASP.NET Core MVC** experience  
-- Proper use of Identity, Areas, Auth, Anti-forgery  
-- Clean architecture and real workflows  
-- Bootstrap-based UI  
-- A portfolio-ready foundation for applying to .NET developer jobs  
+<ul>
+  <li>Showcases real-world <strong>ASP.NET Core MVC</strong> experience</li>
+  <li>Uses <strong>Identity</strong>, roles, areas, and admin workflows</li>
+  <li>Implements EF Core migrations and realistic seeding</li>
+  <li>Follows clean architecture and layering</li>
+  <li>Provides a <strong>portfolio-ready</strong> project for .NET job applications</li>
+</ul>
