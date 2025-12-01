@@ -231,12 +231,17 @@ public class ListingService : IListingService
             .Where(w => w.Id == workerId)
             .FirstOrDefaultAsync();
 
-        if (worker != null && worker.WorkerTypeCategoryId != listing.WorkerTypeCategoryId)
+        if (worker == null || worker.WorkerTypeCategoryId != listing.WorkerTypeCategoryId)
         {
             return false;
         }
         
         if (await IsOwnerAsync(listingId, worker.UserId))
+        {
+            return false;
+        }
+
+        if (worker.WorkerStatus != WorkerStatus.Active)
         {
             return false;
         }
